@@ -1,0 +1,30 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Movies{% endblock %}
+
+{% block content %}
+<!-- movies.html -->
+<section id="top-movies">
+    <h2>Top 10 Movies</h2>
+    <div id="carouselTopMovies" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for movie_with_poster in top_movies_with_posters %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ movie_with_poster.poster_path }}" alt="{{ movie_with_poster.movie.title }}">
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopMovies" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselTopMovies" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+<!-- Repeat similar structure for English and Hindi movies -->
+
+{% endblock %}
