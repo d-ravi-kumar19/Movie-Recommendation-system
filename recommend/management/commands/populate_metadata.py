@@ -54,7 +54,7 @@
 #         self.stdout.write(self.style.SUCCESS('Metadata table populated successfully.'))
 
 from django.core.management.base import BaseCommand
-from recomm.models import Metadata, Movies, Credits
+from recommend.models import Metadata, Movies, Credits
 from ast import literal_eval
 
 class Command(BaseCommand):

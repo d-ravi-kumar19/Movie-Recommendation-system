@@ -1,6 +1,6 @@
 import pickle
 from django.core.management.base import BaseCommand
-from recomm.models import Metadata
+from recommend.models import Metadata
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 import pandas as pd

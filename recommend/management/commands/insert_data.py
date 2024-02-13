@@ -1,20 +1,14 @@
 import csv
-import os
 from django.core.management.base import BaseCommand
-from recomm.models import Movies, Credits  # Import your Django models
+from django.db import IntegrityError
+from recommend.models import Movies, Credits
 
 class Command(BaseCommand):
     help = 'Insert data into Django database from CSV files'
 
     def handle(self, *args, **options):
-        # # Specify the file paths relative to your Django app
-        # base_path = os.path.dirname(os.path.abspath(__file__))
-        # movies_data_file = os.path.join(base_path, 'path', 'to', 'your', 'processed_movies_data.csv')
-        # credits_data_file = os.path.join(base_path, 'path', 'to', 'your', 'processed_credits_data.csv')
-
         movies_data_file = r'C:\Users\Medha Trust\Desktop\django-pro\movie_recomendations\preprocessing\tmdb_data\processed_movies_data.csv'
         credits_data_file = r'C:\Users\Medha Trust\Desktop\django-pro\movie_recomendations\preprocessing\tmdb_data\processed_credits_data.csv'
-
 
         self.insert_movies_data(movies_data_file)
         self.insert_credits_data(credits_data_file)
@@ -34,7 +28,6 @@ class Command(BaseCommand):
                     vote_count = int(row['vote_count'])
                     year = int(row['year'])
                     language = row['language']
-                    # watched = int(value())
 
                     # Use Django ORM to insert data into the Movies table
                     movie_instance = Movies.objects.create(
@@ -49,11 +42,11 @@ class Command(BaseCommand):
                         language=language
                     )
                     movie_instance.save()
+                    self.stdout.write(self.style.SUCCESS(f"Inserted Movie: {title}"))
+                except IntegrityError:
+                    self.stdout.write(self.style.WARNING(f"Movie with ID {movie_id} already exists. Skipping."))
                 except Exception as e:
-                    self.stdout.write(self.style.ERROR(f"Skipping row due to unexpected error: {e}"))
-
-        self.stdout.write(self.style.SUCCESS('Movies table inserted successfully.'))
-        
+                    self.stdout.write(self.style.ERROR(f"Error inserting movie: {e}"))
 
     def insert_credits_data(self, file_path):
         with open(file_path, 'r', encoding='utf-8') as csvfile:
@@ -72,7 +65,8 @@ class Command(BaseCommand):
                         director=director
                     )
                     credit_instance.save()
+                    self.stdout.write(self.style.SUCCESS(f"Inserted Credits for Movie ID: {movie_id}"))
+                except IntegrityError:
+                    self.stdout.write(self.style.WARNING(f"Credits for Movie ID {movie_id} already exist. Skipping."))
                 except Exception as e:
-                    self.stdout.write(self.style.ERROR(f"Skipping row due to unexpected error: {e}"))
-        self.stdout.write(self.style.SUCCESS('Credits table inserted successfully.'))
-        
+                    self.stdout.write(self.style.ERROR(f"Error inserting credits: {e}"))
