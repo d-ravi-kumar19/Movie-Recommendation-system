@@ -11,11 +11,13 @@ body {
     position: sticky;
     top: 0;
     z-index: 10;
+    height: 30px;
 }
 
 #header .navbar {
     background-image: linear-gradient(to right, #a517ba, #5f1782) !important;
-    padding: 0 !important;
+    padding: 30px !important;
+    
 }
 
 
@@ -32,7 +34,7 @@ body {
 #header .navbar {
     background-image: -webkit-linear-gradient(to right, #a517ba, #5f1782);
     background-image: linear-gradient(to right, #a517ba, #5f1782);
-    padding: 0 !important;
+    padding: 20px !important;
 }
 
 #footer{
