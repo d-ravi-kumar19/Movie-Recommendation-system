@@ -1,42 +1,30 @@
-# Django Movie Recommendation Project
+# Movie Recommendation System
 
-Welcome to the Django Movie Recommendation project! This web application uses Django to recommend movies dynamically.
-The backend is powered by Django's default SQLite3 database, and it offers a range of views, including top movies by various criteria.
-Users can receive personalized recommendations, mark movies as watched, and build a watchlist.
-The project showcases the power of Django for creating interactive and data-driven web applications.
+Welcome to the Movie Recommendation System project! This project focuses on building a movie recommendation system using collaborative filtering and content-based techniques.
 
-## Features
-- Dynamic movie recommendations
-- Top movies by language, director, genre, etc.
-- Personalized user interactions
-- Watched movies tracking and watchlist functionality
+## Overview
 
-## Setup and Running the Code
+- **Objective:** Provide personalized movie recommendations to users based on their preferences and behavior.
+- **Techniques Used:**
+  - Collaborative Filtering
+  - Content-Based Filtering
 
-### Prerequisites
-- Python installed
-- pip (Python package installer) installed
+## Project Highlights
 
-### Installation
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/django-movie-recommendation.git
+1. **Collaborative Filtering:**
+   - Implemented collaborative filtering techniques to recommend movies based on user behavior and preferences.
+   - Explored user-item collaborative filtering methods, such as user-based and item-based approaches.
 
-2. **Install dependencies:**
-    ```bash 
-    pip install -r requirements.txt
-3. **Databse setup:**
-    ```bash
-    python manage.py makemigrations
-    python manage.py migrate
-    python manage.py insert_data
-    python manage.py populate_metadata
-    python manage.py dump_data
-4. **Run Server:**
-    ```bash 
-    python manage.py runserver
+2. **Content-Based Filtering:**
+   - Utilized content-based filtering to recommend movies based on the attributes and features of the movies themselves.
+   - Incorporated movie genres, actors, directors, and other metadata for content-based recommendations.
 
+3. **Hybrid Approach:**
+   - Combined collaborative filtering and content-based filtering for a hybrid recommendation system.
+   - Enhanced the recommendation accuracy and coverage by leveraging both approaches.
 
+## How to Use
 
-
-
+- Clone the repository to your local machine.
+  ```bash
+  git clone https://github.com/d-ravi-kumar19/Movie-Recommendation-system.git
