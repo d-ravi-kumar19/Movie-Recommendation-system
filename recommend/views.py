@@ -130,10 +130,19 @@ def get_content_based_recommendations(movie_id, num_recommendations=5):
 
     return recommended_movie_ids
 
+######################## Routers #######################
+
+
 def home(request):
     featured_movies = [
         {'title': 'Movie 1', 'image_path': '/media/movie1.jpg'},
         {'title': 'Movie 2', 'image_path': '/media/movie2.jpg'},
+        {'title': 'Movie 3', 'image_path': '/media/batman_begins.jpeg'},
+        {'title': 'Movie 4', 'image_path': '/media/dark_knight.jpeg'},
+        {'title': 'Movie 5', 'image_path': '/media/inception.jpeg'},
+        {'title': 'Movie 6', 'image_path': '/media/avengers.jpeg'},
+
+
         # Add more movies as needed
     ]
 
