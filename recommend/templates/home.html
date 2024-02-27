@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
 {% block content %}
-
+<br><br><br>
 <!-- Featured Movies Carousel -->
 <section id="featured-movies">
     <h2>Featured Movies</h2>
@@ -43,7 +43,7 @@
         <div class="carousel-inner">
             {% for movie_with_poster in top_movies %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <img src="{{ movie_with_poster.poster_path }}" alt="{{ movie_with_poster.movie.title }}">
+                <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
             </div>
             {% endfor %}
         </div>
@@ -58,81 +58,5 @@
     </div>
 </section>
 
-<!-- Top English Movies -->
-<section id="top-english-movies">
-    <h2>Top 10 English Movies</h2>
-    <div id="carouselTopEnglishMovies" class="carousel slide" data-bs-ride="carousel">
-        {% for movie_with_poster in top_englishmovies %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            {% if movie_with_poster.poster_path %}
-            <img src="{{ movie_with_poster.poster_path }}" alt="{{ movie_with_poster.movie.title }}"
-                class="fixed-size-image">
-            {% else %}
-            <p>{{ movie_with_poster.movie.title }}</p>
-            {% endif %}
-        </div>
-        {% endfor %}
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopEnglishMovies"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselTopEnglishMovies"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</section>
-
-<!-- Top Hindi Movies -->
-<section id="top-hindi-movies">
-    <h2>Top 10 Hindi Movies</h2>
-    <div id="carouselTopHindiMovies" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {% for movie_with_poster in top_hindimovies %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                
-                <img src="{{ movie_with_poster.poster_path }}" alt="{{ movie_with_poster.movie.title }}">
-            </div>
-            {% endfor %}
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopHindiMovies"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselTopHindiMovies"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</section>
-
-<!-- Top Romance Movies -->
-<section id="top-romance-movies">
-    <h2>Top 10 Romance Movies</h2>
-    <div id="carouselTopRomanceMovies" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {% for movie_with_poster in top_romance_movies_with_posters %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <img src="{{ movie_with_poster.poster_path }}" alt="{{ movie_with_poster.movie.title }}">
-            </div>
-            {% endfor %}
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopRomanceMovies"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselTopRomanceMovies"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</section>
 
 {% endblock %}

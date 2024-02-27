@@ -1,0 +1,31 @@
+
+.swiper-container {
+    max-width: 100%; /* Adjust this width as needed */
+    overflow: auto  ;
+    height: 3hh; /* Set a fixed height for the container */
+}
+
+.swiper-wrapper {
+    display: flex !important;
+    flex-direction: row;
+    gap: 20px;
+    margin: 5px;
+
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.swiper-slide {
+    margin-right: 20px; 
+}
+.swiper-wrapper::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+.swiper-wrapper::-webkit-scrollbar-thumb {
+    background-color: transparent; 
+}
+
+.swiper-wrapper::-webkit-scrollbar-track {
+    background-color: transparent; 
+}

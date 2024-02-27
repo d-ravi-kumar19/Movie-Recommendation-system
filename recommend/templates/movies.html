@@ -1,30 +1,142 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Movies{% endblock %}
 
 {% block content %}
-<!-- movies.html -->
-<section id="top-movies">
-    <h2>Top 10 Movies</h2>
-    <div id="carouselTopMovies" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {% for movie_with_poster in top_movies_with_posters %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <img src="{{ movie_with_poster.poster_path }}" alt="{{ movie_with_poster.movie.title }}">
-                </div>
-            {% endfor %}
+&nbsp;
+<br><br>
+<h1>Movies.html</h1>
+
+<!-- Top English Movies -->
+<section id="top-english-movies">
+    <h2>Top 10 English Movies</h2>
+    <div id="carouselTopEnglishMovies" class="carousel slide" data-bs-ride="carousel">
+        {% for movie_with_poster in top_movies %}
+        <div class="swiper-slide">
+            <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+            <p>{{ movie_with_poster.title }}</p>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopMovies" data-bs-slide="prev">
+        {% endfor %}
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopEnglishMovies"
+            data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselTopMovies" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselTopEnglishMovies"
+            data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
     </div>
 </section>
+<!-- Top  Movies -->
 
-<!-- Repeat similar structure for English and Hindi movies -->
+<section id="top-hindi-movies">
+    <h1>Top 10 Movies</h1>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for movie_with_poster in top_movies %}
+            <div class="swiper-slide">
+                <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+                <p>{{ movie_with_poster.title }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+
+
+<!-- Top english Movies -->
+
+<section id="top-english-movies">
+    <h2>Top 10 English Movies</h2>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for movie_with_poster in top_englishmovies %}
+                <div class="swiper-slide">
+                    <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+                    <p>{{ movie_with_poster.title }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+
+<!-- Top Hindi Movies -->
+<section id="top-hindi-movies">
+    <h1>Top 10 Hindi Movies</h1>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for movie_with_poster in top_hindimovies %}
+            <div class="swiper-slide">
+                <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+                <p>{{ movie_with_poster.title }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+
+<!-- Top Romance Movies -->
+<!-- <section id="top-hindi-movies">
+    <h1>Top 10 Hindi Movies</h1>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for movie_with_poster in top_hindimovies %}
+            <div class="swiper-slide">
+                <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+                <p>{{ movie_with_poster.title }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section> -->
+
+<script>
+    // Initialize Swiper for Top English Movies
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+
+    // Initialize Swiper for Top Hindi Movies
+    var swiperHindi = new Swiper('.swiper-container', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+
+    // Initialize Swiper for Top Romance Movies
+    var swiperRomance = new Swiper('#carouselTopRomanceMovies', {
+        slidesPerView: 1,
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.carousel-control-next',
+            prevEl: '.carousel-control-prev',
+        },
+    });
+</script>
 
 {% endblock %}

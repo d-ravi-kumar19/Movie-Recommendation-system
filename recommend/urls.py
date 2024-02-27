@@ -4,9 +4,11 @@ from .views import *
 
 urlpatterns = [
     path('', home, name='home'),
-    path('signup',signup,name='signup'),
     path('movies',movies,name='movies'),
-    path('mylist',mylist,name='mylist'),
-    path('search',search,name='search'),
-    path('movie/', movie_detail, name='movie_detail'),
+    # path('mylist',mylist,name='mylist'),
+    # path('search',search,name='search'),
+    path('moviedetails', movie_search, name='movie_detail'),
+    path('register/', register, name='register'),
+    path('login/', login_view, name='login'),
+    path('dashboard/', dashboard, name='dashboard'),
 ]

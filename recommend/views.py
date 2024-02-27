@@ -1,3 +1,9 @@
+# recommend/views.py
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+from .forms import UserRegistrationForm
+from django.contrib.auth import login
+from django.contrib import messages
 from django.shortcuts import render,get_object_or_404
 import requests
 # from django.http import HttpResponse
@@ -7,10 +13,28 @@ import pickle
 import logging
 
 def login(request):
-    return render(request,'login.html')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            # Redirect to a success page.
+            return redirect('home')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 
 def signup(request):
-    return render(request,'singup.html')
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
+            return redirect('login')  # You can change 'login' to the actual login URL
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'signup.html', {'form': form})
 
 def logout(request):
     return render(request,'logout.html')
@@ -145,7 +169,6 @@ def home(request):
 
         # Add more movies as needed
     ]
-
     context = {
         'featured_movies': featured_movies,
     }
@@ -176,7 +199,7 @@ def movies(request):
         'top_hindimovies': hindi_movies
     } 
 
-    return render(request, 'home.html', context)
+    return render(request, 'movies.html', context)
 
 # def get_movies_by_director(director_name):
 
@@ -185,48 +208,82 @@ def movies(request):
 
 
 
-def movie_detail(request, movie_id=None):
+# def movie_detail(request, movie_id=None):
+#     movie = None
+#     recommended_movies = None
+#     recommended_movie_ids = None
+#     no_recommendations = False
+
+#     if movie_id is not None:
+#         movie_id = int(movie_id)
+#         movie = get_object_or_404(Movies, pk=movie_id)
+#         recommended_movie_ids = get_content_based_recommendations(movie_id)
+
+#     if recommended_movie_ids:
+#         recommended_movies = Movies.objects.filter(id__in=recommended_movie_ids)
+#     else:
+#         no_recommendations = True
+    
+#     if no_recommendations:
+#         return render(request, 'no_recommendations.html', {'movie': movie})
+#     else:
+#         context = {
+#             'movie': movie,
+#             'recommended_movies': recommended_movies,
+#         }
+#         return render(request, 'movie_details.html', context)
+
+def movie_search(request):
     movie = None
     recommended_movies = None
-    recommended_movie_ids = None
-    no_recommendations = False
-    movie_poster = fetch_poster(movie_id)
+    error_message = None
 
-    if request.method == 'POST':
-        movie_id = request.POST.get('input_movie')
+    if request.method == 'GET':
+        movie_id = request.GET.get('movie_id')
 
-    if movie_id is not None:
-        movie_id = int(movie_id)
-        movie = get_object_or_404(Movies, pk=movie_id)
-        recommended_movie_ids = get_content_based_recommendations(movie_id)
+        if movie_id:
+            movie_id = int(movie_id)
+            movie = get_object_or_404(Movies, pk=movie_id)
+            recommended_movie_ids = get_content_based_recommendations(movie_id)
 
-    if recommended_movie_ids:
-        recommended_movies = Movies.objects.filter(id__in=recommended_movie_ids)
-    else:
-        no_recommendations = True
-    
-    if no_recommendations:
-        return render(request, 'no_recommendations.html', {'movie': movie})
-    else:
-        recommended_movies_details = [
-            {
-                'id': movie.id,
-                'title': movie.title,
-                'poster_path': fetch_poster(movie.id),
-                'genres': movie.genres,
-                'keywords': movie.keywords,
-                'overview': movie.overview,
-                'vote_average': movie.vote_average,
-                'vote_count': movie.vote_count,
-                'year': movie.year,
-                'language': movie.language,
-            }
-            for movie in recommended_movies
-        ]
+            if recommended_movie_ids:
+                recommended_movies = Movies.objects.filter(id__in=recommended_movie_ids)
+            else:
+                error_message = "No recommendations found for the provided movie."
 
     context = {
         'movie': movie,
-        'recommended_movies':recommended_movies_details,
+        'recommended_movies': recommended_movies,
+        'error_message': error_message,
     }
-    return render(request, 'movie_detail.html', context)
+    return render(request, 'movie_search.html', context)
 
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import UserRegistrationForm, UserLoginForm
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            # Add your registration logic here
+            messages.success(request, 'Registration successful!')
+            return redirect('login')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'register.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            # Add your login logic here
+            messages.success(request, 'Login successful!')
+            return redirect('dashboard')
+    else:
+        form = UserLoginForm()
+    return render(request, 'login.html', {'form': form})
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
