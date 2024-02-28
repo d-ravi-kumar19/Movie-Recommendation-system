@@ -7,8 +7,10 @@ urlpatterns = [
     path('movies',movies,name='movies'),
     # path('mylist',mylist,name='mylist'),
     # path('search',search,name='search'),
-    path('moviedetails', movie_search, name='movie_detail'),
-    path('register/', register, name='register'),
-    path('login/', login_view, name='login'),
+    path('moviesearch', movie_search, name='moviesearch'),
+    path('signup/', user_signup, name='signup'),
+    path('login/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
+
     path('dashboard/', dashboard, name='dashboard'),
 ]

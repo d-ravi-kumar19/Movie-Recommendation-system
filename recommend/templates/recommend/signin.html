@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<br><br><br>
+
+<div class="container">
+  <h2>Signin</h2>
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="username">User Name</label>
+      <input type="text" class="form-control" name="user_name" placeholder="Enter User Name">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" name="passwprd" placeholder="Password">
+    </div>
+    <p>Don't have account? <a href="{% url 'signup' %}">Signup now</a> </p>
+
+    <div class="btn">
+      <button type="submit" class="btn btn-primary" >Login</button>
+    </div>
+
+
+  </form>
+</div>
+
+{% endblock %}

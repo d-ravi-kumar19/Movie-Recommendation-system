@@ -7,8 +7,8 @@ class Command(BaseCommand):
     help = 'Insert data into Django database from CSV files'
 
     def handle(self, *args, **options):
-        movies_data_file = r'C:\Users\Medha Trust\Desktop\django-pro\movie_recomendations\preprocessing\tmdb_data\processed_movies_data.csv'
-        credits_data_file = r'C:\Users\Medha Trust\Desktop\django-pro\movie_recomendations\preprocessing\tmdb_data\processed_credits_data.csv'
+        movies_data_file = r'C:\Users\Medha Trust\Desktop\My Projects\django-pro\movie_recomendations\preprocessing\tmdb_data\processed_movies_data.csv'
+        credits_data_file = r'C:\Users\Medha Trust\Desktop\My Projects\django-pro\movie_recomendations\preprocessing\tmdb_data\processed_credits_data.csv'
 
         self.insert_movies_data(movies_data_file)
         self.insert_credits_data(credits_data_file)

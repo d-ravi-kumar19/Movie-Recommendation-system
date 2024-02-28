@@ -1,56 +1,10 @@
 # recommend/views.py
-from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import render, redirect
-from .forms import UserRegistrationForm
-from django.contrib.auth import login
-from django.contrib import messages
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 import requests
-# from django.http import HttpResponse
 from django.db.models import *
-from .models import Movies, Credits,Metadata
+from recommend.models import Movies,Credits,UserCredentials,UserTracking
 import pickle
 import logging
-
-def login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            login(request, form.get_user())
-            # Redirect to a success page.
-            return redirect('home')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
-
-def signup(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
-            return redirect('login')  # You can change 'login' to the actual login URL
-    else:
-        form = UserRegistrationForm()
-
-    return render(request, 'signup.html', {'form': form})
-
-def logout(request):
-    return render(request,'logout.html')
-
-def mylist(request):
-    return render(request,'mylist.html')
-
-
-# def fetch_poster(movie_id):
-#     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
-#     data = requests.get(url)
-#     data = data.json()
-#     poster_path = data['poster_path']
-#     full_path = "https://image.tmdb.org/t/p/w500/" + poster_path
-#     return full_path
-
 
 def fetch_poster(movie_id):
     url = "https://imdb146.p.rapidapi.com/v1/find/"
@@ -156,7 +110,6 @@ def get_content_based_recommendations(movie_id, num_recommendations=5):
 
 ######################## Routers #######################
 
-
 def home(request):
     featured_movies = [
         {'title': 'Movie 1', 'image_path': '/media/movie1.jpg'},
@@ -258,32 +211,42 @@ def movie_search(request):
     }
     return render(request, 'movie_search.html', context)
 
-# views.py
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import UserRegistrationForm, UserLoginForm
 
-def register(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            # Add your registration logic here
-            messages.success(request, 'Registration successful!')
-            return redirect('login')
-    else:
-        form = UserRegistrationForm()
-    return render(request, 'register.html', {'form': form})
 
-def login_view(request):
-    if request.method == 'POST':
-        form = UserLoginForm(request.POST)
-        if form.is_valid():
-            # Add your login logic here
-            messages.success(request, 'Login successful!')
-            return redirect('dashboard')
-    else:
-        form = UserLoginForm()
-    return render(request, 'login.html', {'form': form})
+
+
+def user_logout(request):
+    return render(request, 'logout.html')
+
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    # Retrieve user tracking information
+    return render(request, 'recommend/dashboard.html')
+
+
+def user_signup(request):
+    if request.method=='POST':
+        username=request.POST.get("username")
+        email=request.POST.get("email")
+        password1=request.POST.get("password1")
+        password2=request.POST.get("password2")
+        if password1 is not None and password2 is not None and password1 == password2: 
+            data = UserCredentials.objects.create( username= username,email=email,password=password1)
+            data.save() 
+
+            return redirect('sign')
+    return render(request,"recommend/signup.html")
+
+def user_login(request):
+    print("hello goood morning")
+    if request.method=='POST': 
+    
+        username=request.POST.get("username")
+        password=request.POST.get("password")
+        user = UserCredentials.objects.filter(username=username, password=password).first()
+        # print(user)
+        if user is not None:
+            # print('user found')
+            request.session['username'] = user.username
+            return redirect('dashboard')
+    return render(request,"recommend/signin.html") 

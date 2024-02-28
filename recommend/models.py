@@ -30,3 +30,19 @@ class Metadata(models.Model):
 
     def __str__(self):
         return f'Metadata for Movie ID {self.movie.id}'
+
+class UserCredentials(models.Model):
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  # Store hashed password
+
+    def __str__(self):
+        return self.username
+
+class UserTracking(models.Model):
+    user = models.ForeignKey(UserCredentials, on_delete=models.CASCADE)
+    watched_movies = models.ManyToManyField('Movies', related_name='watched_by_users', blank=True)
+    favorite_movies = models.ManyToManyField('Movies', related_name='favorited_by_users', blank=True)
+
+    def __str__(self):
+        return f'Tracking info for {self.user.username}'

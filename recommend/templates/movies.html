@@ -57,8 +57,10 @@
         <div class="swiper-wrapper">
             {% for movie_with_poster in top_englishmovies %}
                 <div class="swiper-slide">
-                    <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
-                    <p>{{ movie_with_poster.title }}</p>
+                    <a href="{% url 'moviesearch'  %}">
+                        <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+                        <p>{{ movie_with_poster.title }}</p>
+                    </a>
                 </div>
             {% endfor %}
         </div>

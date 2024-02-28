@@ -10,24 +10,43 @@
         <input type="text" id="movie_id" name="movie_id" required>
         <button type="submit">Search</button>
     </form>
-    
-    {% if movie %}
-    <h2>{{ movie.title }}</h2>
-    <img src="{{ 'media/inception.jpeg' }}" alt="{{ movie.title }} Poster">
-    
-    <p>{{ movie.description }}</p>
-    
-    {% if recommended_movies %}
+
+    <div class="movie-info">
+        {% if movie %}
+        <img src="{{ 'media/inception.jpeg' }}" alt="{{ movie.title }} Poster">
+        <h2>{{ movie.title }}</h2>
+
+        <p><b>Movie id : </b>{{ movie.id }}</p>
+        <p><b>Genres : </b>{{ movie.genres}}</p>
+
+        <p><b>language: </b>{{ movie.language }}</p>
+        <p><b>Year : </b>{{ movie.year }}</p>
+        <p><b>overview : </b>{{ movie.overview }}</p>
+        <p><b>watched : </b>{{ movie.watched }}</p>
+    </div>
+
+</div>
+{% if recommended_movies %}
+<div class="movie-recommendations">
+
     <h3>Recommended Movies</h3>
-    <ul>
-        {% for recommended_movie in recommended_movies %}
-        <li>{{ recommended_movie.title }}</li>
-        {% endfor %}
-    </ul>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for movie_with_poster in recommended_movies %}
+            <div class="swiper-slide">
+                <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+                <p>{{ movie_with_poster.title }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
     {% else %}
     <p>{{ error_message }}</p>
     {% endif %}
-    {% endif %}
 </div>
+{% endif %}
 
 {% endblock %}
