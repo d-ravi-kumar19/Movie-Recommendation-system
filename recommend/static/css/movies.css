@@ -1,31 +1,61 @@
+.movie-section {
+    margin: 20px;
+}
+
+.carousel-inner .carousel-item img {
+    max-height: 100%;
+    object-fit: cover !important;
+}
 
 .swiper-container {
-    max-width: 100%; /* Adjust this width as needed */
-    overflow: auto  ;
-    height: 3hh; /* Set a fixed height for the container */
+    max-width: 100%;
+    overflow: hidden; /* Hide the scrollbar */
 }
 
 .swiper-wrapper {
     display: flex !important;
     flex-direction: row;
-    gap: 20px;
     margin: 5px;
-
+    height: auto;
+    overflow: auto;
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
+    overflow: contain; /* Hide the scrollbar */
 }
 
 .swiper-slide {
-    margin-right: 20px; 
+    margin-right: 2px;
+    height: 20vh;
 }
+
+.swiper-slide a {
+    display: flexbox;
+    position: relative;
+    text-decoration: none;
+    overflow: auto;
+    /* Add transition for a smooth effect */
+    transition: transform 0.3s ease-in-out;
+}
+
+.swiper-slide a:hover {
+    transform: scale(1.1) translateZ(1);
+    /* Apply scale and translateZ for a 3D effect */
+    /* Add any other hover styles you need */
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: auto;
+}
+
 .swiper-wrapper::-webkit-scrollbar {
     width: 0.5em;
 }
 
 .swiper-wrapper::-webkit-scrollbar-thumb {
-    background-color: transparent; 
+    background-color: transparent;
 }
 
 .swiper-wrapper::-webkit-scrollbar-track {
-    background-color: transparent; 
+    background-color: transparent;
 }

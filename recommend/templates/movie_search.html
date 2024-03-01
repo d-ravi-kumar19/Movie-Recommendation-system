@@ -1,52 +1,140 @@
 {% extends 'base.html' %}
-{% block title %}Login{% endblock %}
+{% block title %}Movie Search{% endblock %}
 
 {% block content %}
 
 <div class="container">
     <h1>Movie Search</h1>
-    <form method="get">
+    <form id="searchForm" method="get">
         <label for="movie_id">Enter Movie ID:</label>
         <input type="text" id="movie_id" name="movie_id" required>
         <button type="submit">Search</button>
     </form>
 
-    <div class="movie-info">
-        {% if movie %}
-        <img src="{{ 'media/inception.jpeg' }}" alt="{{ movie.title }} Poster">
-        <h2>{{ movie.title }}</h2>
+    {% if authenticated %}
+    <div class="movies-info">
+        <div class="movies-info movie">
+            {% if movie %}
+            <img src="{{ 'media/inception.jpeg' }}" alt="{{ movie.title }} Poster">
+            <h2>{{ movie.title }}</h2>
 
-        <p><b>Movie id : </b>{{ movie.id }}</p>
-        <p><b>Genres : </b>{{ movie.genres}}</p>
+            <p><b>Movie id : </b>{{ movie.id }}</p>
+            <p><b>Genres : </b>{{ movie.genres}}</p>
+            <p><b>Language: </b>{{ movie.language }}</p>
+            <p><b>Year : </b>{{ movie.year }}</p>
+            <p><b>Overview : </b>{{ movie.overview }}</p>
 
-        <p><b>language: </b>{{ movie.language }}</p>
-        <p><b>Year : </b>{{ movie.year }}</p>
-        <p><b>overview : </b>{{ movie.overview }}</p>
-        <p><b>watched : </b>{{ movie.watched }}</p>
-    </div>
+            <form id="statusForm" action="{% url 'update_status' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                <input type="hidden" name="movieTitle" value="{{ movie.title }}">
+                <p>{{movieId}}</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="watched" id="watchedCheckbox"
+                        name="statusCheckbox" {% if movie in user_tracking.watched_movies.all %}checked{% endif %}>
 
-</div>
-{% if recommended_movies %}
-<div class="movie-recommendations">
+                    <label class="form-check-label" for="watchedCheckbox">
+                        Watched
+                    </label>
+                </div>
 
-    <h3>Recommended Movies</h3>
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            {% for movie_with_poster in recommended_movies %}
-            <div class="swiper-slide">
-                <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
-                <p>{{ movie_with_poster.title }}</p>
-            </div>
-            {% endfor %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="favorite" id="favoriteCheckbox"
+                        name="statusCheckbox" {% if movie in user_tracking.favorite_movies.all %}checked{% endif %}>
+                    <label class="form-check-label" for="favoriteCheckbox">
+                        Favorite
+                    </label>
+                </div>
+
+                <button type="submit" id="updateStatusButton" style="display: none;">Update Status</button>
+            </form>
+
+            {% endif %}
         </div>
-        <!-- Add Navigation -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+
+        <div class="movie-recommendations">
+            {% if recommended_movies %}
+            <h3>Recommended Movies</h3>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for movie in recommended_movies %}
+                    <div class="swiper-slide">
+                        <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
+                            <img src="/media/inception.jpeg" alt="{{ movie.title }}">
+                            <p>{{ movie.title }}</p>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            {% else %}
+            <p>{{ error_message }}</p>
+            {% endif %}
+        </div>
     </div>
-    {% else %}
-    <p>{{ error_message }}</p>
     {% endif %}
 </div>
-{% endif %}
+
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 5,
+        spaceBetween: 15,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+
+    const watchedCheckbox = document.getElementById('watchedCheckbox');
+    const favoriteCheckbox = document.getElementById('favoriteCheckbox');
+    const updateStatusButton = document.getElementById('updateStatusButton');
+
+    watchedCheckbox.addEventListener('change', () => {
+    updateStatusButton.click();
+});
+
+favoriteCheckbox.addEventListener('change', () => {
+    updateStatusButton.click();
+});
+
+updateStatusButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    const form = document.getElementById('statusForm');
+    const formData = new FormData(form);
+
+    const statusCheckbox = document.getElementsByName('statusCheckbox');
+    const statuses = [];
+    for (let i = 0; i < statusCheckbox.length; i++) {
+        statuses.push(statusCheckbox[i].value);
+    }
+
+    if (statuses.includes('watched')) {
+        formData.append('watched', 'watched');
+    } else {
+        formData.append('watched', 'unwatched');
+    }
+
+    if (statuses.includes('favorite')) {
+        formData.append('favorite', 'favorite');
+    } else {
+        formData.append('favorite', 'unfavorite');
+    }
+
+    fetch('{% url "update_status" %}', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+});
+</script>
 
 {% endblock %}

@@ -1,11 +1,96 @@
-<!-- recommend/templates/recommend/dashboard.html -->
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h2>Welcome to Your Dashboard, {{ request.session.username }}</h2>
-    <!-- Add content specific to the user dashboard -->
-    <a href="{% url 'logout' %}">Logout</a>
+    <h1>Dashboard</h1>
+
+    <div class="user-info">
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.email }}</p>
+    </div>
+
+    <div class="movie-status">
+        <h3>Movie Status</h3>
+
+        {% if movie %}
+
+        <form id="statusForm" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="movie_id" value="{{ movie.id }}">
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="watched" id="watchedCheckbox"
+                    name="statusCheckbox" {% if movie in user_tracking.watched_movies.all %}checked{% endif %}>
+                <label class="form-check-label" for="watchedCheckbox">
+                    Watched
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="favorite" id="favoriteCheckbox"
+                    name="statusCheckbox" {% if movie in user_tracking.favorite_movies.all %}checked{% endif %}>
+                <label class="form-check-label" for="favoriteCheckbox">
+                    Favorite
+                </label>
+            </div>
+
+            <button type="submit" id="updateStatusButton" style="display: none;">Update Status</button>
+        </form>
+
+        <div class="remove-buttons">
+            {% if movie in user_tracking.watched_movies.all %}
+            <button class="btn btn-danger" id="removeFromWatchedButton">Remove from Watched</button>
+            {% endif %}
+
+            {% if movie in user_tracking.favorite_movies.all %}
+            <button class="btn btn-danger" id="removeFromFavoriteButton">Remove from Favorite</button>
+            {% endif %}
+        </div>
+
+        {% else %}
+        <p>No movie selected.</p>
+        {% endif %}
+    </div>
+
+    <div class="watched-movies">
+        <h3>Watched Movies:</h3>
+        {% if user_tracking %}
+        {% if watched_movies %}
+        <ul>
+            {% for movie in watched_movies %}
+            <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
+                <li>{{ movie.title }}</li>
+            </a>
+            {% empty %}
+            <li>No watched movies.</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No watched movies.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="favorite-movies">
+        <h3>Favorite Movies:</h3>
+        {% if user_tracking %}
+        {% if favorite_movies %}
+        <ul>
+            {% for movie in favorite_movies %}
+            <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
+                <li>{{ movie.title }}</li>
+            </a>
+            
+            {% empty %}
+            <li>No favorite movies.</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No favorite movies.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}

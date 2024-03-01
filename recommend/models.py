@@ -1,5 +1,5 @@
 from django.db import models
-
+import uuid
 
 class Credits(models.Model):
     movie = models.OneToOneField('Movies', on_delete=models.CASCADE, primary_key=True)
@@ -32,6 +32,7 @@ class Metadata(models.Model):
         return f'Metadata for Movie ID {self.movie.id}'
 
 class UserCredentials(models.Model):
+    userid = models.CharField(max_length=10, default=None, editable=False,unique = True)
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)  # Store hashed password
@@ -39,6 +40,11 @@ class UserCredentials(models.Model):
     def __str__(self):
         return self.username
 
+    def save(self, *args, **kwargs):
+        if not self.userid:
+            self.userid = f'user{UserCredentials.objects.count() + 1}'
+        super().save(*args, **kwargs)
+        
 class UserTracking(models.Model):
     user = models.ForeignKey(UserCredentials, on_delete=models.CASCADE)
     watched_movies = models.ManyToManyField('Movies', related_name='watched_by_users', blank=True)
