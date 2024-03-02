@@ -2,95 +2,94 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Dashboard</h1>
-
-    <div class="user-info">
-        <h2>{{ user.username }}</h2>
-        <p>{{ user.email }}</p>
+<div class="container mx-auto mt-8 flex">
+    <!-- Sidebar -->
+    <div id="sidebar"
+        class="w-16 h-screen bg-gray-800 text-white fixed top-0 right-0 transition-transform transform translate-x-full">
+        <div class="p-4 cursor-pointer" onclick="toggleSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </div>
+        <!-- Add other sidebar content here -->
     </div>
 
-    <div class="movie-status">
-        <h3>Movie Status</h3>
+    <!-- Main Content -->
+    <div class="flex-1 ml-16">
+        <!-- Rest of your content goes here -->
+        <!-- ... -->
 
-        {% if movie %}
-
-        <form id="statusForm" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="movie_id" value="{{ movie.id }}">
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="watched" id="watchedCheckbox"
-                    name="statusCheckbox" {% if movie in user_tracking.watched_movies.all %}checked{% endif %}>
-                <label class="form-check-label" for="watchedCheckbox">
-                    Watched
-                </label>
+        <!-- User Profile and Info -->
+        <div class="user-profile items-center text-center mb-8 my-8">
+            <div class="flex flex-col items-center">
+                <img src="/media/inception.jpeg" alt="user-profile" class="mx-auto w-32 h-32 rounded-full">
+                <h1 class="text-3xl font-bold">{{ user.username }} Ravi</h1>
+                <p>{{ user.email }} xyz@gmail.com</p>
             </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="favorite" id="favoriteCheckbox"
-                    name="statusCheckbox" {% if movie in user_tracking.favorite_movies.all %}checked{% endif %}>
-                <label class="form-check-label" for="favoriteCheckbox">
-                    Favorite
-                </label>
-            </div>
-
-            <button type="submit" id="updateStatusButton" style="display: none;">Update Status</button>
-        </form>
-
-        <div class="remove-buttons">
-            {% if movie in user_tracking.watched_movies.all %}
-            <button class="btn btn-danger" id="removeFromWatchedButton">Remove from Watched</button>
-            {% endif %}
-
-            {% if movie in user_tracking.favorite_movies.all %}
-            <button class="btn btn-danger" id="removeFromFavoriteButton">Remove from Favorite</button>
-            {% endif %}
         </div>
 
-        {% else %}
-        <p>No movie selected.</p>
-        {% endif %}
-    </div>
 
-    <div class="watched-movies">
-        <h3>Watched Movies:</h3>
-        {% if user_tracking %}
-        {% if watched_movies %}
-        <ul>
-            {% for movie in watched_movies %}
-            <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
-                <li>{{ movie.title }}</li>
-            </a>
-            {% empty %}
-            <li>No watched movies.</li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No watched movies.</p>
-        {% endif %}
-        {% endif %}
-    </div>
+        <!-- Movie Status -->
+        <div class="movie-status mt-8 grid grid-cols-8 my-24">
+            <!-- ... -->
 
-    <div class="favorite-movies">
-        <h3>Favorite Movies:</h3>
-        {% if user_tracking %}
-        {% if favorite_movies %}
-        <ul>
-            {% for movie in favorite_movies %}
-            <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
-                <li>{{ movie.title }}</li>
-            </a>
-            
-            {% empty %}
-            <li>No favorite movies.</li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No favorite movies.</p>
-        {% endif %}
-        {% endif %}
+            <!-- Watched Movies -->
+            <div class="favorite-movies mt-8 col-span-4">
+                <h2 class="text-xl font-bold mb-4">Watched Movies:</h2>
+                {% if user_tracking %}
+                {% if watched_movies %}
+                <ul class="grid grid-cols-2 gap-8">
+                    {% for movie in watched_movies %}
+                    <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" class="flex items-center">
+                        <img src="/media/inception.jpeg" alt="{{ movie.title }}"
+                            class="w-32 h-16 object-cover rounded mr-2">
+                        <span>{{ movie.title }}</span>
+                    </a>
+                    {% empty %}
+                    <li>No watched movies.</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No watched movies.</p>
+                {% endif %}
+                {% endif %}
+            </div>
+
+
+            <!-- Favorite Movies -->
+            <div class="favorite-movies mt-8 col-span-4 ">
+                <h2 class="text-xl font-bold mb-4">Favorite Movies:</h2>
+                {% if user_tracking %}
+                {% if favorite_movies %}
+                <ul class="grid grid-cols-2 gap-4">
+                    {% for movie in favorite_movies %}
+                    <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" class="flex items-center">
+                        <img src="/media/inception.jpeg" alt="{{ movie.title }}"
+                            class="w-32 h-16 object-cover rounded mr-2">
+                        <span>{{ movie.title }}</span>
+                    </a>
+                    {% empty %}
+                    <li>No favorite movies.</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No favorite movies.</p>
+                {% endif %}
+                {% endif %}
+            </div>
+
+        </div>
+
     </div>
 
 </div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('translate-x-full');
+    }
+</script>
+
 {% endblock %}

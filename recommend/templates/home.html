@@ -39,67 +39,69 @@
         </div>
     </section>
 
+
+
     <script>
-        // $(document).ready(function () {
+        $(document).ready(function () {
             // Add scrollspy to the navbar
-            // $('nav').scrollspy({ target: '#navbarNav' });
+            $('nav').scrollspy({ target: '#navbarNav' });
 
             // Add smooth scrolling to all links
-            // $('a').on('click', function (event) {
-            //     if (this.hash !== '') {
-            //         event.preventDefault();
-            //         var hash = this.hash;
-            //         $('html, body').animate(
-            //             {
-            //                 scrollTop: $(hash).offset().top
-            //             },
-            //             800
-            //         );
-            //     }
-            // });
+            $('a').on('click', function (event) {
+                if (this.hash !== '') {
+                    event.preventDefault();
+                    var hash = this.hash;
+                    $('html, body').animate(
+                        {
+                            scrollTop: $(hash).offset().top
+                        },
+                        800
+                    );
+                }
+            });
 
             // Add sticky navbar
-            // $(window).scroll(function () {
-            //     if ($(this).scrollTop() > 36) {
-            //         $('#header').addClass('sticky');
-            //     } else {
-            //         $('#header').removeClass('sticky');
-            //     }
-            // });
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 56) {
+                    $('#header').addClass('sticky');
+                } else {
+                    $('#header').removeClass('sticky');
+                }
+            });
 
             // Initialize Swiper for Top English Movies
-            // var swiper = new Swiper('.swiper-container', {
-            //     slidesPerView: 5,
-            //     spaceBetween: 20,
-            //     navigation: {
-            //         nextEl: '.swiper-button-next',
-            //         prevEl: '.swiper-button-prev',
-            //     },
-            // });
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 5,
+                spaceBetween: 20,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
 
             // Initialize Swiper for Top Hindi Movies
-            // var swiperHindi = new Swiper('.swiper-container', {
-            //     slidesPerView: 5,
-            //     spaceBetween: 20,
-            //     pagination: {
-            //         el: '.swiper-pagination',
-            //         clickable: true,
-            //     },
-            //     navigation: {
-            //         nextEl: '.swiper-button-next',
-            //         prevEl: '.swiper-button-prev',
-            //     },
-            // });
+            var swiperHindi = new Swiper('.swiper-container', {
+                slidesPerView: 5,
+                spaceBetween: 20,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
 
             // Initialize Swiper for Top Romance Movies
-            // var swiperRomance = new Swiper('#carouselTopRomanceMovies', {
-            //     slidesPerView: 5,
-            //     spaceBetween: 10,
-            //     navigation: {
-            //         nextEl: '.carousel-control-next',
-            //         prevEl: '.carousel-control-prev',
-            //     },
-            // });
-        // });
-    </script>   
+            var swiperRomance = new Swiper('#carouselTopRomanceMovies', {
+                slidesPerView: 5,
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.carousel-control-next',
+                    prevEl: '.carousel-control-prev',
+                },
+            });
+        });
+    </script>
 {% endblock %}

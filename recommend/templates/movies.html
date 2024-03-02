@@ -74,22 +74,23 @@
 
 
 <!-- Top Romance Movies -->
-<section id="top-hindi-movies" class="movie-section">
-    <h2 class="text-3xl font-bold mb-4">Top 10 Hindi Movies</h2>
-    <div class="swiper-container" style="height: fit-content;">
-        <div class="swiper-wrapper" style="height: fit-content;">
-            {% for movie in top_hindimovies %}
-            <div class="swiper-slide" style="width: 15rem; height: max-content; padding-top: 1em;">
-                <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
-                    <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
-                        class="w-full h-48 object-cover mb-2">
-                    <p class="text-center">{{ movie.title }}</p>
-                </a>
+<!-- <section id="top-hindi-movies">
+    <h1>Top 10 Hindi Movies</h1>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for movie_with_poster in top_hindimovies %}
+            <div class="swiper-slide">
+                    <a href="{% url 'moviesearch'}">
+                        <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
+                        <p>{{ movie_with_poster.title }}</p>
+                    </a>
             </div>
             {% endfor %}
         </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
     </div>
-</section>
+</section> -->
 
 
 
@@ -97,8 +98,8 @@
 <script>
     // Initialize Swiper for Top English Movies
     var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 7,
-        spaceBetween: 15,
+        slidesPerView: 5,
+        spaceBetween: 20,
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
@@ -106,28 +107,28 @@
     });
 
     // Initialize Swiper for Top Hindi Movies
-    // var swiperHindi = new Swiper('.swiper-container', {
-    //     slidesPerView: 5,
-    //     spaceBetween: 20,
-    //     pagination: {
-    //         el: '.swiper-pagination',
-    //         clickable: true,
-    //     },
-    //     navigation: {
-    //         nextEl: '.swiper-button-next',
-    //         prevEl: '.swiper-button-prev',
-    //     },
-    // });
+    var swiperHindi = new Swiper('.swiper-container', {
+        slidesPerView: 5,
+        spaceBetween: 20,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
 
     // Initialize Swiper for Top Romance Movies
-    // var swiperRomance = new Swiper('#carouselTopRomanceMovies', {
-    //     slidesPerView: 5,
-    //     spaceBetween: 10,
-    //     navigation: {
-    //         nextEl: '.carousel-control-next',
-    //         prevEl: '.carousel-control-prev',
-    //     },
-    // });
+    var swiperRomance = new Swiper('#carouselTopRomanceMovies', {
+        slidesPerView: 5,
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.carousel-control-next',
+            prevEl: '.carousel-control-prev',
+        },
+    });
 </script>
 
 

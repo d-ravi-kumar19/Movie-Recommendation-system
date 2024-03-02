@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,6 @@
     <link rel="stylesheet" href="{% static 'css/movies.css' %}">
     <link rel="stylesheet" href="{% static 'css/movie_search.css' %}">
     <link rel="stylesheet" href="{% static 'css/signin.css' %}">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -22,6 +22,7 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <!-- <script src="{% static 'js/scripts.js' %}"></script> -->
 </head>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
 
 <body class="font-roboto flex flex-col min-h-screen">
@@ -44,9 +45,7 @@
                             <a class="nav-link" href="{% url 'movies' %}">Movies</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
-                        </li>
+
                         <li class="nav-item">
                             <form action="" class="search-bar">
                                 <input type="search" id="search" name="search" required>
@@ -55,10 +54,11 @@
                                 </button>
                             </form>
                         </li>
-
+                        {% if authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">Profile</a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'signin' %}">Sign in</a>
                         </li>
@@ -74,7 +74,7 @@
     </main>
 
 
-    <footer class="footer-distributed">
+    <footer id="footer" class="footer-distributed">
         <div class="footer-right">
             <a href="#"><i class="fa fa-facebook"></i></a>
             <a href="#"><i class="fa-brands fa-x-twitter" style="color: #ffffff;"></i></a>
@@ -84,10 +84,7 @@
         <div class="footer-left">
             <p class="footer-links">
                 <a class="link-1" href="#">Home</a>
-                <a href="#">Blog</a>
-                <a href="#">Pricing</a>
                 <a href="#">About</a>
-                <a href="#">Faq</a>
                 <a href="#">Contact</a>
             </p>
             <p>Developed by Ravi</p>
