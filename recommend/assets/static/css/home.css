@@ -1,0 +1,52 @@
+/* Featured Movies Carousel */
+#featured-movies {
+    margin-top: 2rem;
+}
+
+.carousel-container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.carousel-inner .carousel-item {
+    height: auto;
+    overflow: hidden;
+}
+
+.carousel-inner .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 767.98px) {
+    .carousel-inner .carousel-item {
+        height: 30vh;
+    }
+}
+
+/* Movie Sections */
+/* .movie-section {
+    margin-top: 2rem;
+} */
+
+/* .swiper-container {
+    max-width: 100%;
+    margin: 0 auto;
+} */
+
+/* .swiper-wrapper {
+    display: flex;
+} */
+
+/* .swiper-slide {
+    flex: 0 0 20%; 
+} */
+
+/* Adjustments for smaller screens */
+@media (max-width: 767.98px) {
+    .swiper-slide {
+        flex: 0 0 100%; /* Display one slide per row on smaller screens */
+    }
+}

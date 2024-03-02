@@ -1,0 +1,136 @@
+/* styles.css */
+
+.container {
+    text-align: center;
+    max-width: 400px;
+    margin: auto;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+form {
+    width: 100%;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    font-family: "Roboto", sans-serif;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background: #000051;
+}
+
+.btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+}
+
+.overlay {
+    position: fixed;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.overlay.open {
+    display: flex;
+    animation: show-overlay 0.5s;
+}
+
+@keyframes show-overlay {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.login {
+    padding: 50px 25px;
+    background: white;
+    border-radius: 10px;
+}
+
+.header {
+    position: relative;
+}
+
+.header h1 {
+    text-align: center;
+    text-transform: uppercase;
+    color: #000051;
+    padding-bottom: 7px;
+    border-bottom: 2px solid #000051;
+}
+
+.header i {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    color: #000051;
+}
+
+.body .form input {
+    display: block;
+    padding: 10px;
+    margin: 25px 10px;
+    outline: none;
+    border: solid #000051 1px;
+    color: #000051;
+    transition: 0.4s;
+}
+
+.body .form input:focus {
+    border-color: #534bae;
+}
+
+.footer {
+    position: relative;
+    height: 40px;
+    width: 100%;
+}
+
+.footer button {
+    position: absolute;
+    padding: 10px;
+    min-width: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000051;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.footer button:hover {
+    background: #534bae;
+}

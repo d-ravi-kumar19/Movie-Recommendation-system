@@ -23,7 +23,6 @@ def user_signup(request):
 # ================= user_signin ===================
 
 def user_signin(request):
-    print("hello goood morning")
     authenticated = False
 
     if request.method == 'POST':
@@ -71,18 +70,28 @@ def dashboard(request):
 # ================= home ===================
 
 def home(request):
-    featured_movies = [
-        {'title': 'Movie 1', 'image_path': '/media/movie1.jpg'},
-        {'title': 'Movie 2', 'image_path': '/media/movie2.jpg'},
-        {'title': 'Movie 3', 'image_path': '/media/batman_begins.jpeg'},
-        {'title': 'Movie 4', 'image_path': '/media/dark_knight.jpeg'},
-        {'title': 'Movie 5', 'image_path': '/media/inception.jpeg'},
-        {'title': 'Movie 6', 'image_path': '/media/avengers.jpeg'},
-    ]
-    context = {
-        'featured_movies': featured_movies,
-    }
-    return render(request,'home.html',context)
+    if 'username' in request.session:
+        featured_movies = [
+            {'title': 'Movie 1', 'image_path': '/media/movie1.jpg'},
+            {'title': 'Movie 2', 'image_path': '/media/movie2.jpg'},
+            {'title': 'Movie 3', 'image_path': '/media/batman_begins.jpeg'},
+            {'title': 'Movie 4', 'image_path': '/media/dark_knight.jpeg'},
+            {'title': 'Movie 5', 'image_path': '/media/inception.jpeg'},
+            {'title': 'Movie 6', 'image_path': '/media/avengers.jpeg'},
+        ]
+        top_10_movies = get_top_10_movies()
+        english_movies = get_movies_by_language('English')
+        hindi_movies = get_movies_by_language('Hindi')
+
+        context = {
+            'featured_movies': featured_movies,
+            'top_movies': top_10_movies,
+            'top_englishmovies': english_movies,
+            'top_hindimovies': hindi_movies,
+            'authenticated': True,
+        }
+
+        return render(request,'home.html',context)
 
 def search(request):
     return render(request,'search.html')

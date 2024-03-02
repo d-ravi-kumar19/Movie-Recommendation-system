@@ -3,138 +3,75 @@
 
 {% block content %}
 
-<div class="container">
-    <h1>Movie Search</h1>
-    <form id="searchForm" method="get">
-        <label for="movie_id">Enter Movie ID:</label>
-        <input type="text" id="movie_id" name="movie_id" required>
-        <button type="submit">Search</button>
-    </form>
+<div class="flex justify-between">
 
     {% if authenticated %}
-    <div class="movies-info">
-        <div class="movies-info movie">
+    <div class="flex pr-8">
+        <div class="flex flex-col mr-4 items-center">
+            <img src="{{ 'media/inception.jpeg' }}" class="rounded-md" alt="{{ movie.title }} Poster">
             {% if movie %}
-            <img src="{{ 'media/inception.jpeg' }}" alt="{{ movie.title }} Poster">
-            <h2>{{ movie.title }}</h2>
-
-            <p><b>Movie id : </b>{{ movie.id }}</p>
-            <p><b>Genres : </b>{{ movie.genres}}</p>
-            <p><b>Language: </b>{{ movie.language }}</p>
-            <p><b>Year : </b>{{ movie.year }}</p>
-            <p><b>Overview : </b>{{ movie.overview }}</p>
-
-            <form id="statusForm" action="{% url 'update_status' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="movie_id" value="{{ movie.id }}">
-                <input type="hidden" name="movieTitle" value="{{ movie.title }}">
-                <p>{{movieId}}</p>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="watched" id="watchedCheckbox"
-                        name="statusCheckbox" {% if movie in user_tracking.watched_movies.all %}checked{% endif %}>
-
-                    <label class="form-check-label" for="watchedCheckbox">
-                        Watched
-                    </label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="favorite" id="favoriteCheckbox"
-                        name="statusCheckbox" {% if movie in user_tracking.favorite_movies.all %}checked{% endif %}>
-                    <label class="form-check-label" for="favoriteCheckbox">
-                        Favorite
-                    </label>
-                </div>
-
-                <button type="submit" id="updateStatusButton" style="display: none;">Update Status</button>
-            </form>
-
-            {% endif %}
-        </div>
-
-        <div class="movie-recommendations">
-            {% if recommended_movies %}
-            <h3>Recommended Movies</h3>
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    {% for movie in recommended_movies %}
-                    <div class="swiper-slide">
-                        <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
-                            <img src="/media/inception.jpeg" alt="{{ movie.title }}">
-                            <p>{{ movie.title }}</p>
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-                <!-- Add Navigation -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+            <div class="mt-4">
+                <h2 class="text-xl mb-2">{{ movie.title }}</h2>
+                <p class="mb-1"><b>Movie id:</b> {{ movie.id }}</p>
+                <p class="mb-1"><b>Genres:</b> {{ movie.genres }}</p>
+                <p class="mb-1"><b>Language:</b> {{ movie.language }}</p>
+                <p class="mb-1"><b>Year:</b> {{ movie.year }}</p>
+                <p class="mb-2"><b>Overview:</b> {{ movie.overview }}</p>
             </div>
-            {% else %}
-            <p>{{ error_message }}</p>
             {% endif %}
         </div>
+
+        <form id="statusForm" action="{% url 'update_status' %}" method="post" class="mt-4">
+            {% csrf_token %}
+            <input type="hidden" name="movie_id" value="{{ movie.id }}">
+            <input type="hidden" name="movieTitle" value="{{ movie.title }}">
+            
+            <div class="mb-2">
+                <input type="checkbox" value="watched" id="watchedCheckbox" name="statusCheckbox"
+                    {% if movie in user_tracking.watched_movies.all %}checked{% endif %}>
+                <label for="watchedCheckbox" class="ml-1">Watched</label>
+            </div>
+
+            <div class="mb-2">
+                <input type="checkbox" value="favorite" id="favoriteCheckbox" name="statusCheckbox"
+                    {% if movie in user_tracking.favorite_movies.all %}checked{% endif %}>
+                <label for="favoriteCheckbox" class="ml-1">Favorite</label>
+            </div>
+
+            <button type="submit" id="updateStatusButton" class="hidden">Update Status</button>
+        </form>
+    </div>
+
+
+    <div>
+        {% if recommended_movies %}
+        <h2 class="mb-4">You may also like</h2>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {% for movie in recommended_movies %}
+                <div class="swiper-slide" style="width: 12rem; height: max-content; padding-top: 1em;">
+                    <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
+                        <img src="/media/inception.jpeg" class="rounded-md" alt="{{ movie.title }}">
+                        <p class="mt-2">{{ movie.title }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
     </div>
     {% endif %}
 </div>
 
 <script>
     var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 5,
-        spaceBetween: 15,
+        slidesPerView: 6,
+        spaceBetween: 20,
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
     });
-
-    const watchedCheckbox = document.getElementById('watchedCheckbox');
-    const favoriteCheckbox = document.getElementById('favoriteCheckbox');
-    const updateStatusButton = document.getElementById('updateStatusButton');
-
-    watchedCheckbox.addEventListener('change', () => {
-    updateStatusButton.click();
-});
-
-favoriteCheckbox.addEventListener('change', () => {
-    updateStatusButton.click();
-});
-
-updateStatusButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    const form = document.getElementById('statusForm');
-    const formData = new FormData(form);
-
-    const statusCheckbox = document.getElementsByName('statusCheckbox');
-    const statuses = [];
-    for (let i = 0; i < statusCheckbox.length; i++) {
-        statuses.push(statusCheckbox[i].value);
-    }
-
-    if (statuses.includes('watched')) {
-        formData.append('watched', 'watched');
-    } else {
-        formData.append('watched', 'unwatched');
-    }
-
-    if (statuses.includes('favorite')) {
-        formData.append('favorite', 'favorite');
-    } else {
-        formData.append('favorite', 'unfavorite');
-    }
-
-    fetch('{% url "update_status" %}', {
-        method: 'POST',
-        body: formData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-});
 </script>
 
 {% endblock %}

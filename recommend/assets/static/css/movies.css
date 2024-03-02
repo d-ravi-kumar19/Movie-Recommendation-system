@@ -1,7 +1,3 @@
-.movie-section {
-    margin: 20px;
-}
-
 .carousel-inner .carousel-item img {
     max-height: 100%;
     object-fit: cover !important;
@@ -9,7 +5,7 @@
 
 .swiper-container {
     max-width: 100%;
-    overflow: hidden; /* Hide the scrollbar */
+    height: fit-content;
 }
 
 .swiper-wrapper {
@@ -17,10 +13,15 @@
     flex-direction: row;
     margin: 5px;
     height: auto;
-    overflow: auto;
-    scrollbar-width: thin;
-    scrollbar-color: transparent transparent;
-    overflow: contain; /* Hide the scrollbar */
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: transparent transparent; */
+    overflow: overlay;
+}
+
+.parent-element {
+    position: relative;
+    height: 400px;
+    /* or any other value that suits your design */
 }
 
 .swiper-slide {
@@ -46,6 +47,11 @@
 .swiper-slide img {
     width: 100%;
     height: auto;
+    transition: transform 0.3s ease;
+}
+
+.swiper-slide img:hover {
+    transform: scale(1.08);
 }
 
 .swiper-wrapper::-webkit-scrollbar {

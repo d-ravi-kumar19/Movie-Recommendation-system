@@ -3,30 +3,33 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<br><br><br>
+<div class="content body">
 
-<div class="container">
-  <h2>Signin</h2>
-  <form method="post">
-    {% csrf_token %}
+  <div class="signin">
+    <h1>Sign in</h1>
+    <form method="post">
+      {% csrf_token %}
 
-    <div class="form-group">
-      <label for="username">User Name</label>
-      <input type="text" class="form-control" name="username" placeholder="Enter User Name">
-    </div>
+      <div class="form-group">
+        <label for="username">User Name</label>
+        <input type="text" class="form-control" name="username" placeholder="Enter User Name">
+      </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" class="form-control" name="password" placeholder="Password">
-    </div>
-    <p>Don't have account? <a href="{% url 'signup' %}">Signup now</a> </p>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Password">
+      </div>
+      <p>Don't have account? <a href="{% url 'signup' %}">Signup now</a> </p>
 
-    <div class="btn">
-      <button type="submit" class="btn btn-primary" >Login</button>
-    </div>
+      <div class="btn">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
 
 
-  </form>
+  </div>
+
 </div>
+
 
 {% endblock %}

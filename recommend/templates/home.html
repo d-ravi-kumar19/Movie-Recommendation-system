@@ -1,47 +1,105 @@
 {% extends 'base.html' %}
-{% load static %}
 
-<!-- ----- home.html  ---------- -->
 {% block title %}Home{% endblock %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
-<!-- Add these links to your HTML file -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
 {% block content %}
-<!-- Featured Movies Carousel -->
-<section id="featured-movies">
-    <h2>Featured Movies</h2>
-    <div class="carousel-container">
-    <div id="carouselFeaturedMovies" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {% for featured_movie in featured_movies %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <img src="{{ featured_movie.image_path }}" alt="{{ featured_movie.title }}" class="fixed-size-image">
-
+    <!-- Featured Movies Carousel -->
+    <section id="featured-movies">
+        <div class="carousel-container max-w-full mx-auto">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    {% for i in featured_movies %}
+                        <button type="button" data-bs-target="#carouselExampleCaptions"
+                                data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" {% endif %}></button>
+                    {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                    {% for featured_movie in featured_movies %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ featured_movie.image_path }}" alt="{{ featured_movie.title }}" class="d-block w-100">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 class="text-xl font-semibold">{{ featured_movie.title }}</h5>
+                                <p>{{ featured_movie.description }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Carousel navigation controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            {% endfor %}
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselFeaturedMovies"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselFeaturedMovies"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</div>
-</section>
+    </section>
 
+    <script>
+        // $(document).ready(function () {
+            // Add scrollspy to the navbar
+            // $('nav').scrollspy({ target: '#navbarNav' });
 
+            // Add smooth scrolling to all links
+            // $('a').on('click', function (event) {
+            //     if (this.hash !== '') {
+            //         event.preventDefault();
+            //         var hash = this.hash;
+            //         $('html, body').animate(
+            //             {
+            //                 scrollTop: $(hash).offset().top
+            //             },
+            //             800
+            //         );
+            //     }
+            // });
 
+            // Add sticky navbar
+            // $(window).scroll(function () {
+            //     if ($(this).scrollTop() > 36) {
+            //         $('#header').addClass('sticky');
+            //     } else {
+            //         $('#header').removeClass('sticky');
+            //     }
+            // });
 
+            // Initialize Swiper for Top English Movies
+            // var swiper = new Swiper('.swiper-container', {
+            //     slidesPerView: 5,
+            //     spaceBetween: 20,
+            //     navigation: {
+            //         nextEl: '.swiper-button-next',
+            //         prevEl: '.swiper-button-prev',
+            //     },
+            // });
 
-  
+            // Initialize Swiper for Top Hindi Movies
+            // var swiperHindi = new Swiper('.swiper-container', {
+            //     slidesPerView: 5,
+            //     spaceBetween: 20,
+            //     pagination: {
+            //         el: '.swiper-pagination',
+            //         clickable: true,
+            //     },
+            //     navigation: {
+            //         nextEl: '.swiper-button-next',
+            //         prevEl: '.swiper-button-prev',
+            //     },
+            // });
 
-  
-
+            // Initialize Swiper for Top Romance Movies
+            // var swiperRomance = new Swiper('#carouselTopRomanceMovies', {
+            //     slidesPerView: 5,
+            //     spaceBetween: 10,
+            //     navigation: {
+            //         nextEl: '.carousel-control-next',
+            //         prevEl: '.carousel-control-prev',
+            //     },
+            // });
+        // });
+    </script>   
 {% endblock %}
