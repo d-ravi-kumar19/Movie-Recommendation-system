@@ -28,3 +28,5 @@ Welcome to the Movie Recommendation System project! This project focuses on buil
 - Clone the repository to your local machine.
   ```bash
   git clone https://github.com/d-ravi-kumar19/Movie-Recommendation-system.git
+  ```
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
