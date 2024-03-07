@@ -109,14 +109,6 @@ def _get_movies_by_filter(filter_field, filter_value):
 
     return movies_with_ratings
 
-    
-def get_movies_by_director(director_name):
-    try:
-        movies_by_director = Movies.objects.filter(credits__director__icontains=director_name)
-        return movies_by_director
-    except Exception as e:
-        logging.error(f"Error retrieving movies by director '{director_name}': {e}")
-        return None
 
 def get_content_based_recommendations(movie_id, num_recommendations=5):
     with open('movie_dataframe.pkl', 'rb') as df_file:
