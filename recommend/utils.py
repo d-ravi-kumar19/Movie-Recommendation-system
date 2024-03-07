@@ -3,7 +3,7 @@ import logging
 import pickle
 import requests
 from django.db.models import Avg, ExpressionWrapper, F, FloatField, Value
-from .models import Movies
+from .models import *
 
 def fetch_poster(movie_id):
     url = "https://imdb146.p.rapidapi.com/v1/find/"
@@ -42,26 +42,26 @@ def fetch_posters(movies):
 
     return movies_with_posters
 
-def get_all_movies():
-    try:
-        m = 1000
-        all_movies = Movies.objects.annotate(
-            C=Avg('vote_average'),
-            m=Value(m, output_field=FloatField())
-        ).exclude(vote_count=0, vote_average=0)
+# def get_all_movies():
+#     try:
+#         m = 1000
+#         all_movies = Movies.objects.annotate(
+#             C=Avg('vote_average'),
+#             m=Value(m, output_field=FloatField())
+#         ).exclude(vote_count=0, vote_average=0)
 
-        all_movies = all_movies.annotate(
-            weighted_rating=ExpressionWrapper(
-                (F('vote_count') / (F('vote_count') + F('m'))) * F('vote_average') +
-                (F('m') / (F('vote_count') + F('m'))) * F('C'),
-                output_field=FloatField()
-            )
-        ).order_by('-weighted_rating')
+#         all_movies = all_movies.annotate(
+#             weighted_rating=ExpressionWrapper(
+#                 (F('vote_count') / (F('vote_count') + F('m'))) * F('vote_average') +
+#                 (F('m') / (F('vote_count') + F('m'))) * F('C'),
+#                 output_field=FloatField()
+#             )
+#         ).order_by('-weighted_rating')
 
-        return all_movies
-    except Exception as e:
-        logging.error(f"Error retrieving all movies: {e}")
-        return None
+#         return all_movies
+#     except Exception as e:
+#         logging.error(f"Error retrieving all movies: {e}")
+#         return None
 
 def get_top_10_movies():
     m = 1000
@@ -87,8 +87,26 @@ def get_movies_by_language(language):
 def get_movies_by_genre(genre):
     return _get_movies_by_filter('genres__icontains', genre)
 
-def get_movies_by_director(director):
-    return _get_movies_by_filter('director', director)
+# def get_movies_by_director(director):
+#     m = 1000
+#     movies = Metadata.objects.filter(**{: filter_value}).order_by('-vote_average')
+
+#     movies_with_ratings = movies.annotate(
+#         C=Avg('vote_average'),
+#         m=Value(m, output_field=FloatField())
+#     ).exclude(vote_count=0, vote_average=0)
+
+#     movies_with_ratings = movies_with_ratings.annotate(
+#         weighted_rating=ExpressionWrapper(
+#             (F('vote_count') / (F('vote_count') + F('m'))) * F('vote_average') +
+#             (F('m') / (F('vote_count') + F('m'))) * F('C'),
+#             output_field=FloatField()
+#         )
+#     ).order_by('-weighted_rating')[:10]
+
+#     return movies_with_ratings
+
+#     return _get_movies_by_filter('director', director)
 
 def _get_movies_by_filter(filter_field, filter_value):
     m = 1000

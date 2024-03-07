@@ -108,7 +108,7 @@ def movies(request):
     hindi_movies = get_movies_by_language('Hindi')
     romance_movies = get_movies_by_genre('Romance')
     science_fiction = get_movies_by_genre('ScienceFiction')
-    nolan_movies = get_movies_by_director('ChristopherNolan')
+    # nolan_movies = get_movies_by_director('ChristopherNolan')
 
 
     context = {
@@ -117,7 +117,7 @@ def movies(request):
         'top_hindimovies': hindi_movies,
         'top_romancemovies':romance_movies,
         'top_scifimovies': science_fiction,
-        'nolan_movies': nolan_movies,
+        # 'nolan_movies': nolan_movies,
         'authenticated': True,
     }
 
@@ -144,8 +144,8 @@ def see_more_movies(request, category=None):
         more_movies = Movies.objects.filter(genres__icontains='Romance')
     elif category == 'scifi':
         more_movies = Movies.objects.filter(genres__icontains='ScienceFiction')
-    elif category == 'dir-nolan':
-        more_movies = Movies.objects.filter(credits__director__icontains='ChristopherNolan').order_by('year')[:100]
+    # elif category == 'dir-nolan':
+        # more_movies = Movies.objects.filter(director='ChristopherNolan')
     
     context = {
         'more_movies': more_movies,
@@ -156,19 +156,19 @@ def see_more_movies(request, category=None):
 
 # ================= load more movies ===================
 
-def load_more_movies(request):
-    page = request.GET.get('page', 1)
-    per_page = 20
-    start = (int(page) - 1) * per_page
-    end = start + per_page
+# def load_more_movies(request):
+#     page = request.GET.get('page', 1)
+#     per_page = 20
+#     start = (int(page) - 1) * per_page
+#     end = start + per_page
 
-    # Retrieve the next set of movies
-    more_movies = Movies.objects.all()[start:end]
+#     # Retrieve the next set of movies
+#     more_movies = Movies.objects.all()[start:end]
 
-    context = {
-        'movies_html': render_to_string('movie_list.html', {'more_movies': more_movies}),
-        'has_next': len(more_movies) == per_page,
-    }
+#     context = {
+#         'movies_html': render_to_string('movie_list.html', {'more_movies': more_movies}),
+#         'has_next': len(more_movies) == per_page,
+#     }
 
     return JsonResponse(context)
 # # ================= update movie to database ===================
