@@ -1,0 +1,66 @@
+.carousel-inner .carousel-item img {
+    max-height: 100%;
+    object-fit: cover !important;
+}
+
+.swiper-container {
+    max-width: 100%;
+    height: fit-content;
+}
+
+.swiper-wrapper {
+    display: flex !important;
+    flex-direction: row;
+    margin: 5px;
+    height: auto;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: transparent transparent; */
+    overflow: overlay;
+}
+
+.parent-element {
+    position: relative;
+    height: 400px;
+    /* or any other value that suits your design */
+}
+
+.swiper-slide {
+    margin-right: 2px;
+    height: 20vh;
+}
+
+.swiper-slide a {
+    display: flexbox;
+    position: relative;
+    text-decoration: none;
+    overflow: auto;
+    /* Add transition for a smooth effect */
+    transition: transform 0.3s ease-in-out;
+}
+
+.swiper-slide a:hover {
+    transform: scale(1.1) translateZ(1);
+    /* Apply scale and translateZ for a 3D effect */
+    /* Add any other hover styles you need */
+}
+
+.swiper-slide img {
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.swiper-slide img:hover {
+    transform: scale(1.08);
+}
+
+.swiper-wrapper::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+.swiper-wrapper::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.swiper-wrapper::-webkit-scrollbar-track {
+    background-color: transparent;
+}

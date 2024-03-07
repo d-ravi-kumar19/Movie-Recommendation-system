@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Recommendations</title>
+    <title>FilmFlow</title>
     <link rel="shortcut icon" href='media/clapperboard.png' type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
@@ -30,25 +30,32 @@
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'home' %}">
-                    <i class="fa-solid fa-clapperboard-play fa-lg"></i> Movie Recommendations
+                    <i class="fa-solid fa-clapperboard-play fa-lg"></i> FilmFlow
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto space-x-4">
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'movies' %}">Movies</a>
+                        <li class="nav-item group relative">
+                            <a class="nav-link cursor-pointer" role="button" data-toggle="dropdown" aria-haspopup="true" href="{% url 'movies' %}"
+                                aria-expanded="false">
+                                Movies
+                            </a>
+                            <div class="dropdown-menu absolute hidden bg-white border rounded-md shadow-lg py-1">
+                                <a class="block px-4 py-2 text-sm text-gray-700" href="#">Genre</a>
+                                <a class="block px-4 py-2 text-sm text-gray-700" href="#">Language</a>
+                                <a class="block px-4 py-2 text-sm text-gray-700" href="#">Director</a>
+                            </div>
                         </li>
-
-
                         <li class="nav-item">
                             <form action="" class="search-bar">
-                                <input type="search" id="search" name="search" required>
+                                <input type="search" id="search" name="search" required placeholder="Search"
+                                    class="border border-gray-300 py-1 px-2 rounded-md">
                                 <button class="search-btn" type="submit">
                                     <i class="fa fa-search" id="search-icon"></i>
                                 </button>
@@ -59,15 +66,18 @@
                             <a class="nav-link" href="{% url 'dashboard' %}">Profile</a>
                         </li>
                         {% endif %}
+                        {% if not authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'signin' %}">Sign in</a>
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
+        
     </header>
-    <main>
+    <main class="px-0 my-top-3 bg-neutral-300">
         {% block content %}
         {% endblock %}
 
@@ -90,6 +100,16 @@
             <p>Developed by Ravi</p>
         </div>
     </footer>
+
+    <script>
+        document.querySelector('.group').addEventListener('mouseover', function () {
+            document.querySelector('.dropdown-menu').classList.remove('hidden');
+        });
+    
+        document.querySelector('.group').addEventListener('mouseout', function () {
+            document.querySelector('.dropdown-menu').classList.add('hidden');
+        });
+    </script>
 </body>
 
 </html>

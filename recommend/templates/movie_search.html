@@ -31,7 +31,7 @@
             <div class="w-2/3 ">
                 <div class="movie-status">
                     <div class="movie-data">
-                        <h2 class="text-xl mb-2 font-bold">{{ movie.title }}</h2>
+                        <h2 class="text-3xl mb-2 font-bold">{{ movie.title }}</h2>
                         <p class="mb-1"><b>Movie id:</b> {{ movie.id }}</p>
                         <p class="mb-1"><b>Genres:</b> {{ movie.genres }}</p>
                         <p class="mb-1"><b>Language:</b> {{ movie.language }}</p>
@@ -46,11 +46,11 @@
 
         <div class="movie-recommendations w-full">
             {% if recommended_movies %}
-                <h2 class="text-3xl">Recommended Movies</h2>
+                <h2 class="text-3xl">You may also like</h2>
                 <div class="swiper-container" style="height: fit-content; width: 100%;">
                     <div class="swiper-wrapper" style="height: fit-content; width: 100%;">
                         {% for movie in recommended_movies %}
-                            <div class="swiper-slide"  style="width: 15rem; height: max-content; padding-top: 1em;">
+                            <div class="swiper-slide pt-1"  style="width: 15rem; height: max-content;">
                                 <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
                                     <img src="/media/inception.jpeg" alt="{{ movie.title }}" class="rounded my-2" >
                                     <p class="text-center">{{ movie.title }}</p>

@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from recommend.models import Movies,Credits,UserCredentials,UserTracking
 from django.http import JsonResponse
+from django.contrib.auth import logout
 
 from .utils import *
 from django.contrib import messages
@@ -43,8 +44,12 @@ def user_signin(request):
 
 
 # ================= user_logout ===================
+
 def user_logout(request):
-    return render(request, 'logout.html')
+    # Use Django's logout function to log out the user
+    logout(request)
+    return redirect('home')  # Redirect to the home page after logout
+
 
 # ================= dashboard ===================
 
@@ -56,64 +61,116 @@ def dashboard(request):
         favorite_movies = [favorite for favorite in user_tracking.favorite_movies.all()]
         # print(watched_movies)
         # print(favorite_movies)
+
+        context = {
+            'user_tracking':  user_tracking,
+            'watched_movies': watched_movies,
+            'favorite_movies': favorite_movies,
+        }
+        return render(request, 'recommend/dashboard.html', context=context)
     else:
-        watched_movies = []
-        favorite_movies = []
-
-    context = {
-        'user_tracking':  user_tracking,
-        'watched_movies': watched_movies,
-        'favorite_movies': favorite_movies,
-    }
-
-    return render(request, 'recommend/dashboard.html', context=context)
+        return redirect('signin')
 # ================= home ===================
 
 def home(request):
-    if 'username' in request.session:
-        featured_movies = [
-            {'title': 'Movie 1', 'image_path': '/media/movie1.jpg'},
-            {'title': 'Movie 2', 'image_path': '/media/movie2.jpg'},
-            {'title': 'Movie 3', 'image_path': '/media/batman_begins.jpeg'},
-            {'title': 'Movie 4', 'image_path': '/media/dark_knight.jpeg'},
-            {'title': 'Movie 5', 'image_path': '/media/inception.jpeg'},
-            {'title': 'Movie 6', 'image_path': '/media/avengers.jpeg'},
-        ]
-        top_10_movies = get_top_10_movies()
-        english_movies = get_movies_by_language('English')
-        hindi_movies = get_movies_by_language('Hindi')
 
-        context = {
-            'featured_movies': featured_movies,
-            'top_movies': top_10_movies,
-            'top_englishmovies': english_movies,
-            'top_hindimovies': hindi_movies,
-            'authenticated': True,
-        }
+    featured_movies = [
+        {'title': 'Movie 1', 'image_path': '/media/movie1.jpg'},
+        {'title': 'Movie 2', 'image_path': '/media/movie2.jpg'},
+        {'title': 'Movie 3', 'image_path': '/media/batman_begins.jpeg'},
+        {'title': 'Movie 4', 'image_path': '/media/dark_knight.jpeg'},
+        {'title': 'Movie 5', 'image_path': '/media/inception.jpeg'},
+        {'title': 'Movie 6', 'image_path': '/media/avengers.jpeg'},
+    ]
+    top_10_movies = get_top_10_movies()
+    english_movies = get_movies_by_language('English')
+    hindi_movies = get_movies_by_language('Hindi')
 
-        return render(request,'home.html',context)
+    context = {
+        'featured_movies': featured_movies,
+        'top_movies': top_10_movies,
+        'top_englishmovies': english_movies,
+        'top_hindimovies': hindi_movies,
+        'authenticated': True,
+    }
+
+    return render(request,'home.html',context)
+    
 
 def search(request):
     return render(request,'search.html')
 
 # ================= movies ===================
 def movies(request):
-    if 'username' in request.session:
-        top_10_movies = get_top_10_movies()
-        english_movies = get_movies_by_language('English')
-        hindi_movies = get_movies_by_language('Hindi')
 
-        context = {
-            'top_movies': top_10_movies,
-            'top_englishmovies': english_movies,
-            'top_hindimovies': hindi_movies,
-            'authenticated': True,
-        }
+    top_10_movies = get_top_10_movies()
+    english_movies = get_movies_by_language('English')
+    hindi_movies = get_movies_by_language('Hindi')
+    romance_movies = get_movies_by_genre('Romance')
+    science_fiction = get_movies_by_genre('ScienceFiction')
+    nolan_movies = get_movies_by_director('ChristopherNolan')
 
-        return render(request, 'movies.html', context)
-    else:
-        return redirect('signin')
 
+    context = {
+        'top_movies': top_10_movies,
+        'top_englishmovies': english_movies,
+        'top_hindimovies': hindi_movies,
+        'top_romancemovies':romance_movies,
+        'top_scifimovies': science_fiction,
+        'nolan_movies': nolan_movies,
+        'authenticated': True,
+    }
+
+    return render(request, 'movies.html', context)
+
+# ================= see more movies ===================
+
+
+def see_more_movies(request, category=None):
+    valid_categories = ['english', 'hindi', 'action', 'romance', 'dir-nolan','scifi']
+    
+    if category not in valid_categories:
+        # Handle invalid category (optional)
+        return render(request, 'error.html', {'message': 'Invalid category'})
+    
+    # Filter movies based on the selected category
+    if category == 'english':
+        more_movies = Movies.objects.filter(language='English')
+    elif category == 'hindi':
+        more_movies = Movies.objects.filter(language='Hindi')
+    elif category == 'action-movies':
+        more_movies = Movies.objects.filter(genres__icontains='Action')
+    elif category == 'romance':
+        more_movies = Movies.objects.filter(genres__icontains='Romance')
+    elif category == 'scifi':
+        more_movies = Movies.objects.filter(genres__icontains='ScienceFiction')
+    elif category == 'dir-nolan':
+        more_movies = Movies.objects.filter(credits__director__icontains='ChristopherNolan').order_by('year')[:100]
+    
+    context = {
+        'more_movies': more_movies,
+    }
+    
+    return render(request, 'see_more_movies.html', context)
+
+
+# ================= load more movies ===================
+
+def load_more_movies(request):
+    page = request.GET.get('page', 1)
+    per_page = 20
+    start = (int(page) - 1) * per_page
+    end = start + per_page
+
+    # Retrieve the next set of movies
+    more_movies = Movies.objects.all()[start:end]
+
+    context = {
+        'movies_html': render_to_string('movie_list.html', {'more_movies': more_movies}),
+        'has_next': len(more_movies) == per_page,
+    }
+
+    return JsonResponse(context)
 # # ================= update movie to database ===================
 def update_status(request):
     if request.method == 'POST':

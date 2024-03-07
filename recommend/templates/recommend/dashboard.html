@@ -2,85 +2,133 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="container mx-auto mt-8 flex">
-    <!-- Sidebar -->
-    <div id="sidebar"
-        class="w-16 h-screen bg-gray-800 text-white fixed top-0 right-0 transition-transform transform translate-x-full">
-        <div class="p-4 cursor-pointer" onclick="toggleSidebar()">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-            </svg>
-        </div>
-        <!-- Add other sidebar content here -->
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex-1 ml-16">
-        <!-- Rest of your content goes here -->
-        <!-- ... -->
-
-        <!-- User Profile and Info -->
+<div class="container mt-8 flex">
+    <!-- User Profile and Info (Fixed 30% width) -->
+    <div class="w-1/3 pr-4 bg-pink-100">
         <div class="user-profile items-center text-center mb-8 my-8">
-            <div class="flex flex-col items-center">
+            
+            <div class="flex flex-col items-center p-4">
                 <img src="/media/inception.jpeg" alt="user-profile" class="mx-auto w-32 h-32 rounded-full">
-                <h1 class="text-3xl font-bold">{{ user.username }} Ravi</h1>
+                <h1 class="text-3xl font-bold p-4">{{ user.username }} Ravi</h1>
                 <p>{{ user.email }} xyz@gmail.com</p>
             </div>
         </div>
+    </div>
 
-
+    <!-- Main Content (Remaining 70% width) -->
+    <div class="w-2/3 pl-4 bg-blue-100">
         <!-- Movie Status -->
-        <div class="movie-status mt-8 grid grid-cols-8 my-24">
-            <!-- ... -->
-
-            <!-- Watched Movies -->
-            <div class="favorite-movies mt-8 col-span-4">
-                <h2 class="text-xl font-bold mb-4">Watched Movies:</h2>
-                {% if user_tracking %}
-                {% if watched_movies %}
-                <ul class="grid grid-cols-2 gap-8">
-                    {% for movie in watched_movies %}
-                    <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" class="flex items-center">
-                        <img src="/media/inception.jpeg" alt="{{ movie.title }}"
-                            class="w-32 h-16 object-cover rounded mr-2">
-                        <span>{{ movie.title }}</span>
-                    </a>
-                    {% empty %}
-                    <li>No watched movies.</li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>No watched movies.</p>
-                {% endif %}
-                {% endif %}
-            </div>
-
-
+        <div class="movie-status mt-8 grid grid-rows-8 my-24">
             <!-- Favorite Movies -->
-            <div class="favorite-movies mt-8 col-span-4 ">
-                <h2 class="text-xl font-bold mb-4">Favorite Movies:</h2>
-                {% if user_tracking %}
-                {% if favorite_movies %}
-                <ul class="grid grid-cols-2 gap-4">
+            <div class="favorite-movies mt-8 px-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold mb-4">Favorite Movies:</h2>
+                    {% if user_tracking %}
+                    {% if favorite_movies %}
+                    <div class="relative">
+                        <button id="viewAllFavorites" class="text-blue-500 text-sm bg-transparent border-none">
+                            View All
+                        </button>
+                        <div id="dropdownFavorites" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
+                            <ul class="py-2">
+                                {% for movie in favorite_movies %}
+                                <li>
+                                    <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" class="block px-4 py-2 text-sm hover:bg-gray-100">
+                                        {{ movie.title }}
+                                    </a>
+                                </li>
+                                {% empty %}
+                                <li>No favorite movies.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>No favorite movies.</p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                <ul class="flex gap-4">
                     {% for movie in favorite_movies %}
-                    <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" class="flex items-center">
-                        <img src="/media/inception.jpeg" alt="{{ movie.title }}"
-                            class="w-32 h-16 object-cover rounded mr-2">
-                        <span>{{ movie.title }}</span>
-                    </a>
+                    <li>
+                        <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" id="poster">
+                            <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                                class="w-30 h-28 object-cover mb-2">
+                            <p class="text-center text-sm">{{ movie.title }}</p>
+                        </a>
+                    </li>
                     {% empty %}
                     <li>No favorite movies.</li>
                     {% endfor %}
                 </ul>
-                {% else %}
-                <p>No favorite movies.</p>
-                {% endif %}
-                {% endif %}
             </div>
+            
+            <script>
+                const viewAllFavoritesButton = document.getElementById('viewAllFavorites');
+                const dropdownFavorites = document.getElementById('dropdownFavorites');
+            
+                viewAllFavoritesButton.addEventListener('click', () => {
+                    dropdownFavorites.classList.toggle('hidden');
+                });
+            </script>
+            
+<!-- Watched Movies -->
+<div class="watched-movies mt-8 col-span-4 px-4">
+    <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold mb-4">Watched Movies:</h2>
+        {% if user_tracking %}
+        {% if watched_movies %}
+        <div class="relative">
+            <button id="viewAllWatched" class="text-blue-500 text-sm bg-transparent border-none">
+                View All
+            </button>
+            <div id="dropdownWatched" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
+                <ul class="py-2">
+                    {% for movie in watched_movies %}
+                    <li>
+                        <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" class="block px-4 py-2 text-sm hover:bg-gray-100">
+                            {{ movie.title }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li>No watched movies.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% else %}
+        <p>No watched movies.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+    <ul class="grid grid-cols-4 gap-4">
+        {% for movie in watched_movies %}
+        <li>
+            <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" id="poster">
+                <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                    class="w-30 h-28 object-cover mb-2">
+                <p class="text-center">{{ movie.title }}</p>
+            </a>
+        </li>
+        {% empty %}
+        <li>No watched movies.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    const viewAllWatchedButton = document.getElementById('viewAllWatched');
+    const dropdownWatched = document.getElementById('dropdownWatched');
+
+    viewAllWatchedButton.addEventListener('click', () => {
+        dropdownWatched.classList.toggle('hidden');
+    });
+</script>
+
+
+
 
         </div>
-
     </div>
 
 </div>

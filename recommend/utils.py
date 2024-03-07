@@ -42,6 +42,27 @@ def fetch_posters(movies):
 
     return movies_with_posters
 
+def get_all_movies():
+    try:
+        m = 1000
+        all_movies = Movies.objects.annotate(
+            C=Avg('vote_average'),
+            m=Value(m, output_field=FloatField())
+        ).exclude(vote_count=0, vote_average=0)
+
+        all_movies = all_movies.annotate(
+            weighted_rating=ExpressionWrapper(
+                (F('vote_count') / (F('vote_count') + F('m'))) * F('vote_average') +
+                (F('m') / (F('vote_count') + F('m'))) * F('C'),
+                output_field=FloatField()
+            )
+        ).order_by('-weighted_rating')
+
+        return all_movies
+    except Exception as e:
+        logging.error(f"Error retrieving all movies: {e}")
+        return None
+
 def get_top_10_movies():
     m = 1000
     top_movies = Movies.objects.annotate(
@@ -59,9 +80,19 @@ def get_top_10_movies():
 
     return top_movies
 
+
 def get_movies_by_language(language):
+    return _get_movies_by_filter('language', language)
+
+def get_movies_by_genre(genre):
+    return _get_movies_by_filter('genres__icontains', genre)
+
+def get_movies_by_director(director):
+    return _get_movies_by_filter('director', director)
+
+def _get_movies_by_filter(filter_field, filter_value):
     m = 1000
-    movies = Movies.objects.filter(language=language).order_by('-vote_average')
+    movies = Movies.objects.filter(**{filter_field: filter_value}).order_by('-vote_average')
 
     movies_with_ratings = movies.annotate(
         C=Avg('vote_average'),
@@ -77,6 +108,15 @@ def get_movies_by_language(language):
     ).order_by('-weighted_rating')[:10]
 
     return movies_with_ratings
+
+    
+def get_movies_by_director(director_name):
+    try:
+        movies_by_director = Movies.objects.filter(credits__director__icontains=director_name)
+        return movies_by_director
+    except Exception as e:
+        logging.error(f"Error retrieving movies by director '{director_name}': {e}")
+        return None
 
 def get_content_based_recommendations(movie_id, num_recommendations=5):
     with open('movie_dataframe.pkl', 'rb') as df_file:

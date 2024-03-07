@@ -5,22 +5,19 @@
 
 {% block content %}
 <!-- Top  movies Movies -->
-<section id="top-10-movies">
+<section id="top-10-movies ">
     <h2>Top 10 Movies</h2>
-    <div id="carouselTopEnglishMovies" class="carousel slide" data-bs-ride="carousel">
-        {% for featured_movie in top_movies %}
+    <div id="carouselTopEnglishMovies" class="carousel slide p-2 mt-3" data-bs-ride="carousel">
         <div class="carousel-inner">
-            {% if authenticated %}
+            {% for featured_movie in top_movies %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <a href="{% url 'moviesearch' %}?movie_id={{featured_movie.id}}">
                     <img src="{{ 'media/batman_begins.jpeg' }}" alt="{{ featured_movie.title }}"
-                        class="fixed-size-image">
-
+                        class="img-fluid rounded-md" style="max-height: 75vh; width: full;">
                 </a>
             </div>
-            {% endif %}
+            {% endfor %}
         </div>
-        {% endfor %}
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopEnglishMovies"
             data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -36,9 +33,14 @@
 
 
 
+
 <!-- Top English Movies -->
-<section id="top-english-movies" class="movie-section">
-    <h2 class="text-3xl font-bold mb-4">Top 10 English Movies</h2>
+<section id="top-english-movies" class="movie-section px-2">
+    <div class="flex items-center">
+        <h2 class="text-3xl font-bold mb-4">Top English Movies</h2>
+        <a href="{% url 'see_more_movies' category='english' %}" class="text-blue-500 text-sm ml-2">See More</a>
+    </div>
+    
     <div class="swiper-container" style="height: fit-content;">
         <div class="swiper-wrapper">
             {% for movie in top_englishmovies %}
@@ -52,11 +54,16 @@
             {% endfor %}
         </div>
     </div>
+    
 </section>
 
 <!-- Top Hindi Movies -->
-<section id="top-hindi-movies" class="movie-section">
-    <h2 class="text-3xl font-bold mb-4">Top 10 Hindi Movies</h2>
+<section id="top-hindi-movies" class="movie-section px-2">
+    <div class="flex items-center">
+        <h2 class="text-3xl font-bold mb-4">Top Hindi Movies</h2>
+        <a href="{% url 'see_more_movies' category='hindi' %}" class="text-blue-500 text-sm ml-2">See More</a>
+    </div>
+
     <div class="swiper-container" style="height: fit-content;">
         <div class="swiper-wrapper" style="height: fit-content;">
             {% for movie in top_hindimovies %}
@@ -74,31 +81,78 @@
 
 
 <!-- Top Romance Movies -->
-<!-- <section id="top-hindi-movies">
-    <h1>Top 10 Hindi Movies</h1>
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            {% for movie_with_poster in top_hindimovies %}
-            <div class="swiper-slide">
-                    <a href="{% url 'moviesearch'}">
-                        <img src="/media/inception.jpeg" alt="{{ movie_with_poster.title }}">
-                        <p>{{ movie_with_poster.title }}</p>
-                    </a>
+<section id="top-romance-movies" class="movie-section px-2">
+    <div class="flex items-center">
+        <h2 class="text-3xl font-bold mb-4">Top Romance Movies</h2>
+        <a href="{% url 'see_more_movies' category='romance' %}" class="text-blue-500 text-sm ml-2">See More</a>
+    </div>
+    <div class="swiper-container" style="height: fit-content;">
+        <div class="swiper-wrapper" style="height: fit-content;">
+            {% for movie in top_romancemovies %}
+            <div class="swiper-slide" style="width: 15rem; height: max-content; padding-top: 1em;">
+                <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
+                    <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                        class="w-full h-48 object-cover mb-2">
+                    <p class="text-center">{{ movie.title }}</p>
+                </a>
             </div>
             {% endfor %}
+
         </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
     </div>
-</section> -->
+</section>
+<!-- Top Scifi Movies -->
+<section id="top-scifi-movies" class="movie-section px-2">
+    <div class="flex items-center">
+        <h2 class="text-3xl font-bold mb-4">Top Sci-Fi Movies</h2>
+        <a href="{% url 'see_more_movies' category='scifi' %}" class="text-blue-500 text-sm ml-2">See More</a>
+    </div>
+    <div class="swiper-container" style="height: fit-content;">
+        <div class="swiper-wrapper" style="height: fit-content;">
+            {% for movie in top_scifimovies %}
+            <div class="swiper-slide" style="width: 15rem; height: max-content; padding-top: 1em;">
+                <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
+                    <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                        class="w-full h-48 object-cover mb-2">
+                    <p class="text-center">{{ movie.title }}</p>
+                </a>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<!-- Top Scifi Movies -->
+<section id="top-dir-nolan-movies" class="movie-section px-2">
+    <div class="flex items-center">
+        <h2 class="text-3xl font-bold mb-4">Top Nolan Movies</h2>
+        <a href="{% url 'see_more_movies' category='dir-nolan' %}" class="text-blue-500 text-sm ml-2">See More</a>
+    </div>
+    <div class="swiper-container" style="height: fit-content;">
+        <div class="swiper-wrapper" style="height: fit-content;">
+            {% for movie in nolan_movies %}
+            <div class="swiper-slide" style="width: 15rem; height: max-content; padding-top: 1em;">
+                <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
+                    <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                        class="w-full h-48 object-cover mb-2">
+                    <p class="text-center">{{ movie.title }}</p>
+                </a>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
 
 
-
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
 <script>
     // Initialize Swiper for Top English Movies
+
     var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 5,
+        slidesPerView: 6,
         spaceBetween: 20,
         navigation: {
             nextEl: '.swiper-button-next',
@@ -108,7 +162,7 @@
 
     // Initialize Swiper for Top Hindi Movies
     var swiperHindi = new Swiper('.swiper-container', {
-        slidesPerView: 5,
+        slidesPerView: 6,
         spaceBetween: 20,
         pagination: {
             el: '.swiper-pagination',
@@ -122,7 +176,7 @@
 
     // Initialize Swiper for Top Romance Movies
     var swiperRomance = new Swiper('#carouselTopRomanceMovies', {
-        slidesPerView: 5,
+        slidesPerView: 6,
         spaceBetween: 10,
         navigation: {
             nextEl: '.carousel-control-next',
