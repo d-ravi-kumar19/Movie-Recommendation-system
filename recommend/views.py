@@ -204,21 +204,33 @@ def update_status(request):
 # # ================= search_results ===================
 
 
+
+
+
 def search_results(request):
     if request.method == 'GET':
         # Retrieve the search query from the submitted form
         search_query = request.GET.get('search', '')
+        search_query = search_query.lower().replace(' ', '').strip()
 
-        # Process the search query (you can add your processing logic here)
-        print(search_query)
-        # Redirect to the movie_search page with the processed query
-        return redirect('movie_search', query=search_query)
-    else:
-        # Handle other HTTP methods if needed
-        return render(request, 'movie_search.html')
+        # Fetch movies that match the search query (case-insensitive)
+        movies = Movies.objects.filter(title__icontains=search_query)
+
+        # Redirect to the movie_search page with the first movie's ID if found
+        if movies.exists():
+            first_movie_id = movies.first().id
+            return redirect('moviesearch_with_id', movie_id=first_movie_id)
+
+        # Pass the search results to the template
+        context = {
+            'search_query': search_query,
+            'movies': movies,
+        }
+
+        # Render the movie_search template with the search results
+        return render(request, 'movie_search.html', context=context)
 
 # # ================= movie_search ===================
-
 
 def movie_search(request):
     if 'username' in request.session:
@@ -252,8 +264,8 @@ def movie_search(request):
             'movie': movie,
             'recommended_movies': recommended_movies,
             'error_message': error_message,
-            'authenticated': True,  
-            'user_tracking':user_tracking,
+            'authenticated': True,
+            'user_tracking': user_tracking,
         }
 
         return render(request, 'movie_search.html', context)
