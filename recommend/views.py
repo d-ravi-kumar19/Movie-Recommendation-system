@@ -156,19 +156,19 @@ def see_more_movies(request, category=None):
 
 # ================= load more movies ===================
 
-# def load_more_movies(request):
-#     page = request.GET.get('page', 1)
-#     per_page = 20
-#     start = (int(page) - 1) * per_page
-#     end = start + per_page
+def load_more_movies(request):
+    page = request.GET.get('page', 1)
+    per_page = 20
+    start = (int(page) - 1) * per_page
+    end = start + per_page
 
-#     # Retrieve the next set of movies
-#     more_movies = Movies.objects.all()[start:end]
+    # Retrieve the next set of movies
+    more_movies = Movies.objects.all()[start:end]
 
-#     context = {
-#         'movies_html': render_to_string('movie_list.html', {'more_movies': more_movies}),
-#         'has_next': len(more_movies) == per_page,
-#     }
+    context = {
+        'movies_html': render_to_string('movie_list.html', {'more_movies': more_movies}),
+        'has_next': len(more_movies) == per_page,
+    }
 
     return JsonResponse(context)
 # # ================= update movie to database ===================
@@ -201,8 +201,24 @@ def update_status(request):
             response_data = {'message': 'You must be logged in to update the movie status.'}
             return JsonResponse(response_data, status=401)
 
+# # ================= search_results ===================
+
+
+def search_results(request):
+    if request.method == 'GET':
+        # Retrieve the search query from the submitted form
+        search_query = request.GET.get('search', '')
+
+        # Process the search query (you can add your processing logic here)
+        print(search_query)
+        # Redirect to the movie_search page with the processed query
+        return redirect('movie_search', query=search_query)
+    else:
+        # Handle other HTTP methods if needed
+        return render(request, 'movie_search.html')
 
 # # ================= movie_search ===================
+
 
 def movie_search(request):
     if 'username' in request.session:

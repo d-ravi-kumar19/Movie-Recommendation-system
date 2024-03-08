@@ -128,7 +128,7 @@ def _get_movies_by_filter(filter_field, filter_value):
     return movies_with_ratings
 
 
-def get_content_based_recommendations(movie_id, num_recommendations=5):
+def get_content_based_recommendations(movie_id, num_recommendations=10):
     with open('movie_dataframe.pkl', 'rb') as df_file:
         df = pickle.load(df_file)
 
