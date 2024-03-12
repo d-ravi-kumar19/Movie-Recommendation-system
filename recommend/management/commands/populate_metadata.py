@@ -1,7 +1,7 @@
 # recommend/management/commands/populate_metadata.py
 
 from django.core.management.base import BaseCommand
-from recommend.models import Metadata, Movies, Credits
+from recommend.models import Metadata, Movies
 from ast import literal_eval
 
 class Command(BaseCommand):
@@ -11,36 +11,29 @@ class Command(BaseCommand):
         # Clear existing data in the metadata table
         Metadata.objects.all().delete()
 
-        # Fetch data from recomm_movies and recomm_credits
-        movies_data = Movies.objects.values('id', 'overview', 'genres', 'keywords').all()
-        credits_data = Credits.objects.values('movie_id', 'cast', 'director').all()
+        # Fetch data from recomm_movies 
+        movies_data = Movies.objects.values('id','title', 'overview', 'genres', 'keywords','cast', 'director').all()
+        # credits_data = Credits.objects.values('movie_id', 'cast', 'director').all()
 
-        # Create a dictionary to store combined information
         metadata_dict = {}
 
         # Populate the dictionary with combined information
         for movie in movies_data:
             movie_id = movie['id']
-
+            
             genres_list = literal_eval(movie['genres'])
             keywords_list = literal_eval(movie['keywords'])
+            cast_list = literal_eval(movie['cast'])
 
             metadata_dict[movie_id] = {
-                'overview': movie['overview'],
                 'genres': genres_list,
                 'keywords': keywords_list,
-                'cast': [],
-                'director': ''
+                'overview': movie['overview'],
+                'cast': cast_list,
+                'director': movie['director']
             }
 
-        for credit in credits_data:
-            movie_id = credit['movie_id']
 
-            cast_list = literal_eval(credit['cast'])
-
-            if movie_id in metadata_dict:
-                metadata_dict[movie_id]['cast'] = cast_list
-                metadata_dict[movie_id]['director'] = credit['director']
 
         # Populate the Metadata table
         for movie_id, metadata_info in metadata_dict.items():

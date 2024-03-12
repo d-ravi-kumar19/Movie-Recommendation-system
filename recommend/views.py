@@ -1,6 +1,6 @@
 # recommend/views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from recommend.models import Movies,Credits,UserCredentials,UserTracking
+from recommend.models import Movies,UserCredentials,UserTracking
 from django.http import JsonResponse
 from django.contrib.auth import logout
 
@@ -61,6 +61,7 @@ def dashboard(request):
         favorite_movies = [favorite for favorite in user_tracking.favorite_movies.all()]
         # print(watched_movies)
         # print(favorite_movies)
+        
 
         context = {
             'user_tracking':  user_tracking,
@@ -102,14 +103,16 @@ def search(request):
 
 # ================= movies ===================
 def movies(request):
-
+    # movie_posters =[]
     top_10_movies = get_top_10_movies()
     english_movies = get_movies_by_language('English')
     hindi_movies = get_movies_by_language('Hindi')
     romance_movies = get_movies_by_genre('Romance')
     science_fiction = get_movies_by_genre('ScienceFiction')
-    # nolan_movies = get_movies_by_director('ChristopherNolan')
+    thiller_movies = get_movies_by_genre('Thriller')
 
+    # nolan_movies = get_movies_by_director('ChristopherNolan')
+    
 
     context = {
         'top_movies': top_10_movies,
@@ -117,6 +120,7 @@ def movies(request):
         'top_hindimovies': hindi_movies,
         'top_romancemovies':romance_movies,
         'top_scifimovies': science_fiction,
+        'top_thillermovies':thiller_movies,
         # 'nolan_movies': nolan_movies,
         'authenticated': True,
     }
@@ -130,7 +134,6 @@ def see_more_movies(request, category=None):
     valid_categories = ['english', 'hindi', 'action', 'romance', 'dir-nolan','scifi']
     
     if category not in valid_categories:
-        # Handle invalid category (optional)
         return render(request, 'error.html', {'message': 'Invalid category'})
     
     # Filter movies based on the selected category
@@ -204,21 +207,26 @@ def update_status(request):
 # # ================= search_results ===================
 
 
+
 def search_results(request):
     if request.method == 'GET':
-        # Retrieve the search query from the submitted form
         search_query = request.GET.get('search', '')
+        search_query = search_query.lower().replace(' ', '').strip()
 
-        # Process the search query (you can add your processing logic here)
-        print(search_query)
-        # Redirect to the movie_search page with the processed query
-        return redirect('movie_search', query=search_query)
-    else:
-        # Handle other HTTP methods if needed
-        return render(request, 'movie_search.html')
+        movies = Movies.objects.filter(title__icontains=search_query)
+
+        if movies.exists():
+            first_movie_id = movies.first().id
+            return redirect('moviesearch_with_id', movie_id=first_movie_id)
+
+        context = {
+            'search_query': search_query,
+            'movies': movies,
+        }
+
+        return render(request, 'movie_search.html', context=context)
 
 # # ================= movie_search ===================
-
 
 def movie_search(request):
     if 'username' in request.session:
@@ -252,8 +260,8 @@ def movie_search(request):
             'movie': movie,
             'recommended_movies': recommended_movies,
             'error_message': error_message,
-            'authenticated': True,  
-            'user_tracking':user_tracking,
+            'authenticated': True,
+            'user_tracking': user_tracking,
         }
 
         return render(request, 'movie_search.html', context)

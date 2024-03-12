@@ -6,23 +6,13 @@ from django.db.models import Avg, ExpressionWrapper, F, FloatField, Value
 from .models import *
 
 def fetch_poster(movie_id):
-    url = "https://imdb146.p.rapidapi.com/v1/find/"
-
-    querystring = {"id": "tt0087884"}
-
-    headers = {
-        "X-RapidAPI-Key": "713d419c2emsh6fc87fe03c25287p1b0b45jsn5a38fc312049",
-        "X-RapidAPI-Host": "imdb146.p.rapidapi.com"
-    }
-
+    url = "https://api.themoviedb.org/3/movie/{}?api_key=c5593d7e3a6a6f8e2278388ae57498b7&language=en-US".format(movie_id)
+    data = requests.get(url)
+    data = data.json()
+    poster_path = data['poster_path']
     try:
-        response = requests.get(url, headers=headers, params=querystring)
-        response.raise_for_status()
-        data = response.json()
-        poster_path = data.get('poster_path')
-
         if poster_path:
-            full_path = f"https://image.tmdb.org/t/p/w500/{poster_path}"
+            full_path = "https://image.tmdb.org/t/p/w500/" + poster_path
             return full_path
         else:
             return None  # No poster path available for the movie
@@ -41,6 +31,15 @@ def fetch_posters(movies):
         })
 
     return movies_with_posters
+
+
+# def fetch_poster(movie_id):
+#     url = "https://api.themoviedb.org/3/movie/{}?api_key=c5593d7e3a6a6f8e2278388ae57498b7&language=en-US".format(movie_id)
+#     data = requests.get(url)
+#     data = data.json()
+#     poster_path = data['poster_path']
+#     full_path = "https://image.tmdb.org/t/p/w500/" + poster_path
+#     return full_path
 
 # def get_all_movies():
 #     try:

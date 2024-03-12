@@ -11,6 +11,7 @@ urlpatterns = [
     path('load-more-movies/', load_more_movies, name='load_more_movies'),
     path('search/', search_results, name='search_results'),
     path('moviesearch', movie_search, name='moviesearch'),
+    path('moviesearch/', movie_search, name='moviesearch_no_id'),
     path('moviesearch/<int:movie_id>/', movie_search, name='moviesearch_with_id'),
     path('signup/', user_signup, name='signup'),
     path('signin/', user_signin, name='signin'),

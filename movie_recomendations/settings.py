@@ -94,7 +94,7 @@ WSGI_APPLICATION = "movie_recomendations.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "new_db.sqlite3",
+        'NAME': BASE_DIR / "newdb.sqlite3",
     }
 }
 # Password validation

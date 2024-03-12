@@ -1,7 +1,7 @@
 {% for movie in more_movies %}
 <div class="movie-item">
     <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
-        <img src="/media/inception.jpeg" alt="{{ movie.title }}" class="w-full h-48 object-cover mb-2 rounded-md">
+        <img src="{{ movie.poster_path}}"  alt="{{ movie.title }}" class="w-full h-48 object-cover mb-2 rounded-md">
         <p class="text-center">{{ movie.title }}</p>
     </a>
 </div>
