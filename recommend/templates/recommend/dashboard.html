@@ -54,7 +54,7 @@
                     {% for movie in favorite_movies %}
                     <li>
                         <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" id="poster">
-                            <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                            <img src="{{ movie.poster_path}}" style="border-radius: 10px;" alt="{{ movie.title }}"
                                 class="w-30 h-28 object-cover mb-2">
                             <p class="text-center text-sm">{{ movie.title }}</p>
                         </a>
@@ -101,7 +101,7 @@
                     {% for movie in watched_movies %}
                     <li>
                         <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" id="poster">
-                            <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                            <img src="{{ movie.poster_path}}" style="border-radius: 10px;" alt="{{ movie.title }}"
                                 class="w-30 h-28 object-cover mb-2">
                             <p class="text-center">{{ movie.title }}</p>
                         </a>

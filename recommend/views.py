@@ -1,6 +1,6 @@
 # recommend/views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from recommend.models import Movies,Credits,UserCredentials,UserTracking
+from recommend.models import Movies,UserCredentials,UserTracking
 from django.http import JsonResponse
 from django.contrib.auth import logout
 
@@ -61,6 +61,7 @@ def dashboard(request):
         favorite_movies = [favorite for favorite in user_tracking.favorite_movies.all()]
         # print(watched_movies)
         # print(favorite_movies)
+        
 
         context = {
             'user_tracking':  user_tracking,
@@ -102,14 +103,16 @@ def search(request):
 
 # ================= movies ===================
 def movies(request):
-
+    # movie_posters =[]
     top_10_movies = get_top_10_movies()
     english_movies = get_movies_by_language('English')
     hindi_movies = get_movies_by_language('Hindi')
     romance_movies = get_movies_by_genre('Romance')
     science_fiction = get_movies_by_genre('ScienceFiction')
-    # nolan_movies = get_movies_by_director('ChristopherNolan')
+    thiller_movies = get_movies_by_genre('Thriller')
 
+    # nolan_movies = get_movies_by_director('ChristopherNolan')
+    
 
     context = {
         'top_movies': top_10_movies,
@@ -117,6 +120,7 @@ def movies(request):
         'top_hindimovies': hindi_movies,
         'top_romancemovies':romance_movies,
         'top_scifimovies': science_fiction,
+        'top_thillermovies':thiller_movies,
         # 'nolan_movies': nolan_movies,
         'authenticated': True,
     }

@@ -16,7 +16,7 @@ class Command(BaseCommand):
         df = pd.DataFrame.from_records(moviemeta_data)
 
         # Fill missing values with empty string
-        # df = df.fillna('')
+        df = df.fillna('')
 
         # TF-IDF Vectorization
         tfidf_vectorizer = TfidfVectorizer(stop_words='english')
