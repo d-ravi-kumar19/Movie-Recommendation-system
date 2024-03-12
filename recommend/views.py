@@ -111,7 +111,7 @@ def movies(request):
     science_fiction = get_movies_by_genre('ScienceFiction')
     thiller_movies = get_movies_by_genre('Thriller')
 
-    # nolan_movies = get_movies_by_director('ChristopherNolan')
+    nolan_movies = get_movies_by_director('ChristopherNolan')
     
 
     context = {
@@ -121,7 +121,7 @@ def movies(request):
         'top_romancemovies':romance_movies,
         'top_scifimovies': science_fiction,
         'top_thillermovies':thiller_movies,
-        # 'nolan_movies': nolan_movies,
+        'nolan_movies': nolan_movies,
         'authenticated': True,
     }
 

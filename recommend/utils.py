@@ -86,9 +86,13 @@ def get_movies_by_language(language):
 def get_movies_by_genre(genre):
     return _get_movies_by_filter('genres__icontains', genre)
 
+def get_movies_by_director(director):
+    return _get_movies_by_filter('director__icontains', director)
+
+
 # def get_movies_by_director(director):
 #     m = 1000
-#     movies = Metadata.objects.filter(**{: filter_value}).order_by('-vote_average')
+#     movies = Movies.objects.filter(**{filter_field: filter_value}).order_by('-vote_average')
 
 #     movies_with_ratings = movies.annotate(
 #         C=Avg('vote_average'),
@@ -105,7 +109,7 @@ def get_movies_by_genre(genre):
 
 #     return movies_with_ratings
 
-#     return _get_movies_by_filter('director', director)
+    # return _get_movies_by_filter('director', director)
 
 def _get_movies_by_filter(filter_field, filter_value):
     m = 1000
