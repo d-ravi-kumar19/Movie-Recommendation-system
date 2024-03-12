@@ -134,7 +134,6 @@ def see_more_movies(request, category=None):
     valid_categories = ['english', 'hindi', 'action', 'romance', 'dir-nolan','scifi']
     
     if category not in valid_categories:
-        # Handle invalid category (optional)
         return render(request, 'error.html', {'message': 'Invalid category'})
     
     # Filter movies based on the selected category
@@ -209,29 +208,22 @@ def update_status(request):
 
 
 
-
-
 def search_results(request):
     if request.method == 'GET':
-        # Retrieve the search query from the submitted form
         search_query = request.GET.get('search', '')
         search_query = search_query.lower().replace(' ', '').strip()
 
-        # Fetch movies that match the search query (case-insensitive)
         movies = Movies.objects.filter(title__icontains=search_query)
 
-        # Redirect to the movie_search page with the first movie's ID if found
         if movies.exists():
             first_movie_id = movies.first().id
             return redirect('moviesearch_with_id', movie_id=first_movie_id)
 
-        # Pass the search results to the template
         context = {
             'search_query': search_query,
             'movies': movies,
         }
 
-        # Render the movie_search template with the search results
         return render(request, 'movie_search.html', context=context)
 
 # # ================= movie_search ===================
