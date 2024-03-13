@@ -3,11 +3,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from recommend.models import Movies,UserCredentials,UserTracking
 from django.http import JsonResponse
 from django.contrib.auth import logout
-
 from .utils import *
 from django.contrib import messages
-# ================= user_signup ===================
 
+# ================= user_signup ===================
 def user_signup(request):
     if request.method=='POST':
         username=request.POST.get("username")
@@ -19,10 +18,9 @@ def user_signup(request):
             data.save()
 
             return redirect('signin')
-    return render(request,"recommend/signup.html")
+    return render(request,"registration/signup.html")
 
 # ================= user_signin ===================
-
 def user_signin(request):
     authenticated = False
 
@@ -40,11 +38,10 @@ def user_signin(request):
         else:
             messages.error(request, 'Invalid credentials.')
 
-    return render(request, "recommend/signin.html", {'authenticated': authenticated})
+    return render(request, "registration/signin.html", {'authenticated': authenticated})
 
 
 # ================= user_logout ===================
-
 def user_logout(request):
     # Use Django's logout function to log out the user
     logout(request)
@@ -52,27 +49,28 @@ def user_logout(request):
 
 
 # ================= dashboard ===================
-
 def dashboard(request):
     # Retrieve user tracking information
-    if 'username' in request.session:
+    if 'userid' in request.session:
         user_tracking = UserTracking.objects.get(user=request.session['userid'])
         watched_movies = [movie for movie in user_tracking.watched_movies.all()]
         favorite_movies = [favorite for favorite in user_tracking.favorite_movies.all()]
-        # print(watched_movies)
-        # print(favorite_movies)
-        
-
+        print(user_tracking)
+        user =  UserCredentials.objects.get(pk=request.session["userid"])
+        print(user)
         context = {
-            'user_tracking':  user_tracking,
+            'user_tracking': user_tracking,
             'watched_movies': watched_movies,
             'favorite_movies': favorite_movies,
+            'user': user,  
+
         }
-        return render(request, 'recommend/dashboard.html', context=context)
+        return render(request, 'registration/dashboard.html', context=context)
     else:
         return redirect('signin')
-# ================= home ===================
 
+
+# ================= home ===================
 def home(request):
 
     featured_movies = [
@@ -97,6 +95,7 @@ def home(request):
 
     return render(request,'home.html',context)
     
+# ================= search ===================
 
 def search(request):
     return render(request,'search.html')
@@ -129,7 +128,6 @@ def movies(request):
 
 # ================= see more movies ===================
 
-
 def see_more_movies(request, category=None):
     valid_categories = ['english', 'hindi', 'action', 'romance', 'dir-nolan','scifi']
     
@@ -141,14 +139,14 @@ def see_more_movies(request, category=None):
         more_movies = Movies.objects.filter(language='English')
     elif category == 'hindi':
         more_movies = Movies.objects.filter(language='Hindi')
-    elif category == 'action-movies':
-        more_movies = Movies.objects.filter(genres__icontains='Action')
+    elif category == 'thiller-movies':
+        more_movies = Movies.objects.filter(genres__icontains='Thiller')
     elif category == 'romance':
         more_movies = Movies.objects.filter(genres__icontains='Romance')
     elif category == 'scifi':
         more_movies = Movies.objects.filter(genres__icontains='ScienceFiction')
-    # elif category == 'dir-nolan':
-        # more_movies = Movies.objects.filter(director='ChristopherNolan')
+    elif category == 'dir-nolan':
+        more_movies = Movies.objects.filter(director='ChristopherNolan')
     
     context = {
         'more_movies': more_movies,
@@ -156,9 +154,7 @@ def see_more_movies(request, category=None):
     
     return render(request, 'see_more_movies.html', context)
 
-
 # ================= load more movies ===================
-
 def load_more_movies(request):
     page = request.GET.get('page', 1)
     per_page = 20
@@ -179,6 +175,7 @@ def update_status(request):
     if request.method == 'POST':
         if 'username' in request.session:
             user = UserCredentials.objects.get(username=request.session['username'])
+            print(user)
             user_tracking = UserTracking.objects.get_or_create(user=user)[0]
             movie_id = request.POST.get('movie_id')
             movie = get_object_or_404(Movies, id=movie_id)
@@ -205,9 +202,6 @@ def update_status(request):
             return JsonResponse(response_data, status=401)
 
 # # ================= search_results ===================
-
-
-
 def search_results(request):
     if request.method == 'GET':
         search_query = request.GET.get('search', '')
@@ -227,7 +221,6 @@ def search_results(request):
         return render(request, 'movie_search.html', context=context)
 
 # # ================= movie_search ===================
-
 def movie_search(request):
     if 'username' in request.session:
         username = request.session['username']

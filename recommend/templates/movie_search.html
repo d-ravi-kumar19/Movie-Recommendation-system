@@ -32,14 +32,14 @@
                 <div class="movie-status">
                     <div class="movie-data">
                         <h2 class="text-5xl mb-2 font-bold py-4">{{ movie.title }}</h2>
-                        <p class="text-lg mb-1"><b>Movie id:</b> {{ movie.id }}</p>
-                        <p class="text-lg mb-1"><b>Genres:</b> {{ movie.genres }}</p>
-                        <p class="text-lg mb-1"><b>Language:</b> {{ movie.language }}</p>
-                        <p class="text-lg mb-1"><b>Year:</b> {{ movie.year }}</p>
-                        <p class="text-lg mb-1"><b>Cast:</b> {{ movie.cast }}</p>
-                        <p class="text-lg mb-1"><b>Director:</b> {{ movie.director }}</p>
+                        <p class="text-xl mb-1"><b>Movie id:</b> {{ movie.id }}</p>
+                        <p class="text-xl mb-1"><b>Genres:</b> {{ movie.genres }}</p>
+                        <p class="text-xl mb-1"><b>Language:</b> {{ movie.language }}</p>
+                        <p class="text-xl mb-1"><b>Year:</b> {{ movie.year }}</p>
+                        <p class="text-xl mb-1"><b>Cast:</b> {{ movie.cast }}</p>
+                        <p class="text-xl mb-1"><b>Director:</b> {{ movie.director }}</p>
 
-                        <p class="text-md mb-2"><b>Overview: <br></b> {{ movie.overview }}</p>
+                        <p class="text-xl mb-2"><b>Overview: <br></b> {{ movie.overview }}</p>
                     </div>
                 </div>
                 
@@ -76,6 +76,54 @@
                 prevEl: '.swiper-button-prev',
             },
         });
+
+        const watchedCheckbox = document.getElementById('watchedCheckbox');
+const favoriteCheckbox = document.getElementById('favoriteCheckbox');
+const updateStatusButton = document.getElementById('updateStatusButton');
+
+watchedCheckbox.addEventListener('change', () => {
+    updateStatusButton.click();
+});
+
+favoriteCheckbox.addEventListener('change', () => {
+    updateStatusButton.click();
+});
+
+updateStatusButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    const form = document.getElementById('statusForm');
+    const formData = new FormData(form);
+
+    const statusCheckbox = document.getElementsByName('statusCheckbox');
+    const statuses = [];
+    for (let i = 0; i < statusCheckbox.length; i++) {
+        statuses.push(statusCheckbox[i].value);
+    }
+
+    if (statuses.includes('watched')) {
+        formData.append('watched', 'watched');
+    } else {
+        formData.append('watched', 'unwatched');
+    }
+
+    if (statuses.includes('favorite')) {
+        formData.append('favorite', 'favorite');
+    } else {
+        formData.append('favorite', 'unfavorite');
+    }
+
+    fetch('{% url "update_status" %}', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+});
     </script>
 
     {% endblock %}

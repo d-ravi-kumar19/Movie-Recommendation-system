@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %} Dashboard {% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-8 flex mt-4 my-2">
+    <!-- User Profile and Info (Fixed 30% width) -->
+    <div class="w-1/3 pr-4 bg-white bg-opacity-20 backdrop-blur-md rounded mx-2 shadow-md">
+        <div class="user-profile items-center text-center justify-between mb-8 my-8">
+            <div class="flex flex-col items-center p-4 gap-4">
+                <img src="/media/inception.jpeg" alt="user-profile" class="mx-auto w-32 h-32 rounded-full">
+                <div class="user-info flex flex-col items-start justify-start">
+                    <h1 class="text-xl  p-2">username: {{ user.username }}</h1>
+                    <h1 class="text-xl  p-2">email: {{ user.email }}</h1>
+                    <h1 class="text-xl  p-2">password: {{ user.password }}</h1>
+                </div>
+                
+            </div>
+            
+            <div class="logout-btn ">
+                <a type="button" href="{% url 'logout' %}" class="logout-btn bg-red-400 rounded-md p-2 text-white justify-end">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (Remaining 70% width) -->
+    <div class="w-2/3 pl-4 bg-white bg-opacity-20 backdrop-blur-md rounded shadow-md">
+        <!-- Movie Status -->
+        <div class="movie-status mt-8 grid-rows-8 my-24">
+            <!-- Favorite Movies -->
+            <div class="favorite-movies mt-8 px-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold mb-4">Favorite Movies:</h2>
+                    {% if user_tracking %}
+                        {% if favorite_movies %}
+                            <div class="relative">
+                                <button id="viewAllFavorites" class="text-blue-500 text-sm bg-transparent border-none">
+                                    View All
+                                </button>
+                                <div id="dropdownFavorites"
+                                    class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
+                                    <ul class="py-2 contents">
+                                        {% for movie in favorite_movies %}
+                                            <li>
+                                                <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}"
+                                                    class="px-4 py-2 text-sm hover:bg-gray-100">
+                                                    {{ movie.title }}
+                                                </a>
+                                            </li>
+                                        {% empty %}
+                                            <li>No favorite movies.</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p>No favorite movies.</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            
+                <div class="swiper-container" style="height: fit-content;">
+                    <div class="swiper-wrapper">
+                        {% for movie in favorite_movies %}
+                            <div class="swiper-slide" style="width: 15rem; height: max-content; padding-top: 1em;">
+                                <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" id="poster">
+                                    <img src="{{ movie.poster_path }}" style="border-radius: 10px;" alt="{{ movie.title }}"
+                                    class="w-full h-64 object-cover mb-2">
+                                    <p class="text-center">{{ movie.title }}</p>
+                                </a>
+                            </div>
+                        {% empty %}
+                            <div class="swiper-slide">
+                                <p>No favorite movies.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watched Movies -->
+            <div class="watched-movies mt-8 col-span-6 px-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold mb-6">Watched Movies:</h2>
+                    {% if user_tracking %}
+                    {% if watched_movies %}
+                    <div class="relative">
+                        <button id="viewAllWatched" class="text-blue-500 text-sm bg-transparent border-none">
+                            View All
+                        </button>
+                        <div id="dropdownWatched"
+                            class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
+                            <ul class="py-2">
+                                {% for movie in watched_movies %}
+                                <li>
+                                    <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}"
+                                        class="block px-4 py-2 text-sm hover:bg-gray-100">
+                                        {{ movie.title }}
+                                    </a>
+                                </li>
+                                {% empty %}
+                                <li>No watched movies.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p>No watched movies.</p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                <ul class="grid grid-cols-5 gap-4">
+                    {% for movie in watched_movies %}
+                    <li>
+                        <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" id="poster">
+                            <img src="{{ movie.poster_path}}" style="border-radius: 10px;" alt="{{ movie.title }}"
+                                class="w-full h-64 object-cover mb-2">
+                            <p class="text-center">{{ movie.title }}</p>
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li>No watched movies.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const viewAllWatchedButton = document.getElementById('viewAllWatched');
+    const dropdownWatched = document.getElementById('dropdownWatched');
+
+    viewAllWatchedButton.addEventListener('click', () => {
+        dropdownWatched.classList.toggle('hidden');
+    });
+
+    const viewAllFavoritesButton = document.getElementById('viewAllFavorites');
+    const dropdownFavorites = document.getElementById('dropdownFavorites');
+
+    viewAllFavoritesButton.addEventListener('click', () => {
+        dropdownFavorites.classList.toggle('hidden');
+    });
+
+    var swiperFavorites = new Swiper('.favorite-movies .swiper-container', {
+        slidesPerView: 6,  // Adjust the number of visible slides as needed
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+</script>
+
+{% endblock %}

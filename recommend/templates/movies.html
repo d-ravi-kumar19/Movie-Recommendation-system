@@ -11,12 +11,10 @@
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
                 aria-current="true" aria-label="Slide 1"></button>
-
             {% for featured_movie in top_movies %}
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
                 aria-label="Slide 2"></button>
             {% endfor %}
-
         </div>
         <div class="carousel-inner">
             {% for featured_movie in top_movies %}
@@ -54,7 +52,6 @@
         <h2 class="text-3xl font-bold mb-4">Top English Movies</h2>
         <a href="{% url 'see_more_movies' category='english' %}" class="text-blue-500 text-sm ml-2">See More</a>
     </div>
-
     <div class="swiper-container" style="height: fit-content;">
         <div class="swiper-wrapper">
             {% for movie in top_englishmovies %}
@@ -71,6 +68,27 @@
 
 </section>
 
+<!-- Top English Movies -->
+<section id="top-english-movies" class="movie-section px-2">
+    <div class="flex items-center justify-between">
+        <h2 class="text-3xl font-bold mb-4">Top Hindi Movies</h2>
+        <a href="{% url 'see_more_movies' category='hindi' %}" class="text-blue-500 text-sm ml-2">See More</a>
+    </div>
+    <div class="swiper-container" style="height: fit-content;">
+        <div class="swiper-wrapper">
+            {% for movie in top_hindimovies %}
+            <div class="swiper-slide" style="width: 15rem; height: max-content; padding-top: 1em;">
+                <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}" id="poster">
+                    <img src="{{ movie.poster_path}}" style="border-radius: 10px;" alt="{{ movie.title }}"
+                        class="w-full h-48 object-cover mb-2">
+                    <p class="text-center">{{ movie.title }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
 
 
 <!-- Top Scifi Movies -->
@@ -90,7 +108,6 @@
                 </a>
             </div>
             {% endfor %}
-
         </div>
     </div>
 </section>
@@ -99,9 +116,8 @@
 <section id="top-hindi-movies" class="movie-section px-2">
     <div class="flex items-center justify-between">
         <h2 class="text-3xl font-bold mb-4">Top Thriller Movies</h2>
-        <a href="{% url 'see_more_movies' category='hindi' %}" class="text-blue-500 text-sm ml-2">See More</a>
+        <a href="{% url 'see_more_movies' category='thiller' %}" class="text-blue-500 text-sm ml-2">See More</a>
     </div>
-
     <div class="swiper-container" style="height: fit-content;">
         <div class="swiper-wrapper" style="height: fit-content;">
             {% for movie in top_thillermovies %}
@@ -116,6 +132,7 @@
         </div>
     </div>
 </section>
+
 <!-- Top Romance Movies -->
 <section id="top-romance-movies" class="movie-section px-2">
     <div class="flex items-center justify-between">
@@ -133,16 +150,17 @@
                 </a>
             </div>
             {% endfor %}
-
         </div>
     </div>
 </section>
 
 
-<!-- Nolan Movies -->
-<!-- <section id="top-dir-nolan-movies" class="movie-section px-2">
-    <div class="flex items-center">
-        <h2 class="text-3xl font-bold mb-4">Top Nolan Movies</h2>
+
+
+<!-- Top Nolan Movies -->
+<section id="top-romance-movies" class="movie-section px-2">
+    <div class="flex items-center justify-between">
+        <h2 class="text-3xl font-bold mb-4">Christopher Nolan Movies</h2>
         <a href="{% url 'see_more_movies' category='dir-nolan' %}" class="text-blue-500 text-sm ml-2">See More</a>
     </div>
     <div class="swiper-container" style="height: fit-content;">
@@ -150,16 +168,15 @@
             {% for movie in nolan_movies %}
             <div class="swiper-slide" style="width: 15rem; height: max-content; padding-top: 1em;">
                 <a href="{% url 'moviesearch' %}?movie_id={{ movie.id }}">
-                    <img src="/media/inception.jpeg" style="border-radius: 10px;" alt="{{ movie.title }}"
+                    <img src="{{ movie.poster_path}}" style="border-radius: 10px;" alt="{{ movie.title }}"
                         class="w-full h-48 object-cover mb-2">
                     <p class="text-center">{{ movie.title }}</p>
                 </a>
             </div>
             {% endfor %}
-
         </div>
     </div>
-</section> -->
+</section>
 
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

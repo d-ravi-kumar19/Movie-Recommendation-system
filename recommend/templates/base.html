@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FilmFlow</title>
-    <link rel="shortcut icon" href='media/clapperboard.png' type="image/x-icon">
+    <link rel="shortcut icon" href='./media/clapperboard.png' type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -25,12 +25,12 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
 
-<body class="font-roboto flex flex-col min-h-screen">
+<body class="text-xl font-roboto flex-col min-h-screen">
     <header id="header" class="sticky h-30">
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
                 <a class="navbar-brand flex" href="{% url 'home' %}">
-                    <img  class="logo w-6 h-6" src='media/clapperboard.png' alt="">
+                    <img  class="logo w-6 h-6" src='./media/clapperboard.png' alt="">
                     <p class="title mx-2 text-xl font-roboto text-gray-50">FilmFlow</p> 
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -45,7 +45,7 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{% url 'movies' %}">Movies</a>
                         </li>
-                        <!-- <li class="nav-item">
+                        <li class="nav-item">
                             <form action="{% url 'moviesearch' %}" class="search-bar" method="get">
                                 <input type="search" id="search" name="search" required placeholder="Search"
                                     class="border border-gray-300 py-1 px-2 rounded-md">
@@ -53,7 +53,7 @@
                                     <i class="fa fa-search" id="search-icon"></i>
                                 </button>
                             </form>
-                        </li> -->
+                        </li>
                         {% if authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">Profile</a>
@@ -77,14 +77,14 @@
     </main>
 
 
-    <footer id="footer" class="footer-distributed">
+    <footer id="footer" class="footer-distributed text-xl font-roboto">
         <div class="footer-right">
             <a href="#"><i class="fa-brands fa-linkedin"></i></a>
             <a href="#"><i class="fa-brands fa-square-github"></i></a>
         </div>
         <div class="footer-left">
             <p class="footer-links">
-                <a class="link-1" href="#">Home</a>
+                <a class="link-1"  href="{% url 'home' %}">Home</a>
                 <a href="#">About</a>
                 <a href="#">Contact</a>
             </p>
