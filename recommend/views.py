@@ -63,12 +63,10 @@ def dashboard(request):
             'watched_movies': watched_movies,
             'favorite_movies': favorite_movies,
             'user': user,  
-
         }
         return render(request, 'registration/dashboard.html', context=context)
     else:
         return redirect('signin')
-
 
 # ================= home ===================
 def home(request):
@@ -94,9 +92,8 @@ def home(request):
     }
 
     return render(request,'home.html',context)
-    
-# ================= search ===================
 
+# ================= search ===================
 def search(request):
     return render(request,'search.html')
 
@@ -170,7 +167,7 @@ def load_more_movies(request):
     }
 
     return JsonResponse(context)
-# # ================= update movie to database ===================
+# ================= update movie to database ===================
 def update_status(request):
     if request.method == 'POST':
         if 'username' in request.session:
@@ -201,7 +198,7 @@ def update_status(request):
             response_data = {'message': 'You must be logged in to update the movie status.'}
             return JsonResponse(response_data, status=401)
 
-# # ================= search_results ===================
+# ================= search_results ===================
 def search_results(request):
     if request.method == 'GET':
         search_query = request.GET.get('search', '')
@@ -220,7 +217,7 @@ def search_results(request):
 
         return render(request, 'movie_search.html', context=context)
 
-# # ================= movie_search ===================
+# ================= movie_search ===================
 def movie_search(request):
     if 'username' in request.session:
         username = request.session['username']

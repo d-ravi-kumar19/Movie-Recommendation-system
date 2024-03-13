@@ -155,3 +155,5 @@ def get_content_based_recommendations(movie_id, num_recommendations=10):
     recommended_movie_ids = df.iloc[similar_movie_indices]['movie'].tolist()
 
     return recommended_movie_ids
+
+
