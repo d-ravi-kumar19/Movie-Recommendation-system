@@ -132,10 +132,10 @@ def _get_movies_by_filter(filter_field, filter_value):
 
 
 def get_content_based_recommendations(movie_id, num_recommendations=10):
-    with open('movie_dataframe.pkl', 'rb') as df_file:
+    with open('models/movie_dataframe.pkl', 'rb') as df_file:
         df = pickle.load(df_file)
 
-    with open('similarity_matrix.pkl', 'rb') as similarity_file:
+    with open('models/similarity_matrix.pkl', 'rb') as similarity_file:
         similarity = pickle.load(similarity_file)
 
     movie_index = df[df['movie'] == movie_id].index
