@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.contrib.auth import logout
 from .utils import *
 from django.contrib import messages
+from django.template.loader import render_to_string
 
 # ================= user_signup ===================
 def user_signup(request):
