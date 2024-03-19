@@ -226,11 +226,9 @@ def movie_search(request):
         except UserCredentials.DoesNotExist:
             print("User not found.")
             return redirect('signin')
-
+        
         user = get_object_or_404(UserCredentials, username=username)
-
         user_tracking, created = UserTracking.objects.get_or_create(user=user)
-
         movie_id = request.GET.get('movie_id')
         movie = None
         recommended_movies = None
