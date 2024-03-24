@@ -4,7 +4,7 @@
 # source /path/to/your/virtualenv/bin/activate
 
 # Install required packages
-# pip install -r requirements.txt
+pip install -r requirements.txt
 
 # Create migrations and apply them
 python manage.py makemigrations

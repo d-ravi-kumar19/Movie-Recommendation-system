@@ -148,6 +148,7 @@ def see_more_movies(request, category=None):
     
     context = {
         'more_movies': more_movies,
+        "category" :category.capitalize,
     }
     
     return render(request, 'see_more_movies.html', context)
